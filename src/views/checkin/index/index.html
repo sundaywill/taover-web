@@ -1,0 +1,51 @@
+<layout>
+  <b slot="center" class="p2 grey">签到</b>
+  <div class="clearfix">
+    <div class="col col-12 white px1 py3 bg bg-main">
+      <div class="flex items-center justify-center">
+        <div class="col p07" v-for="(integral, index) in integrals1">
+          <a class="col-12 btn p0">
+            <div class="col-12 center bg bg-card">
+              <div class="col-12 flex items-center justify-center">第{{ index + 1 }}天</div>
+              <div class="col-12 flex items-center justify-center py09">
+                <div class="col-12 py1 bg bg-coin">{{ integral }}</div>
+              </div>
+              <div class="col-12 flex items-center justify-center border-box" v-show="checked > index">
+                <div class="col-12 relative bg-cover">
+                  <img src="http://img01.taover.com/images/89-4.png">
+                  <div>已领取</div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="flex items-center justify-center">
+        <div class="col p07" v-for="(integral, index) in integrals2">
+          <a class="col-12 btn p0">
+            <div class="col-12 center bg bg-card">
+              <div class="col-12 flex items-center justify-center">第{{ index + 4 }}天</div>
+              <div class="col-12 flex items-center justify-center py09">
+                <div class="col-12 py1 bg bg-coin">{{ integral }}</div>
+              </div>
+              <div class="col-12 flex items-center justify-center border-box" v-show="checked > index + 3">
+                <div class="col-12 relative bg-cover">
+                  <img src="http://img01.taover.com/images/89-4.png">
+                  <div>已领取</div>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap content-center px2 py3 grey bg-white">
+      <div class="col-12 center h4">您已连续签到{{ checked }}天</div>
+      <div class="col-12 center p1 h3">恭喜您获得<span class="orange">{{ current }}</span>个积分</div>
+      <div class="col-12 center h4">明天签到可获得{{ next }}个积分</div>
+    </div>
+
+    <foot></foot>
+  </div>
+</layout>

@@ -1,0 +1,27 @@
+<layout>
+  <b slot="center" class="p2 grey">项目已售</b>
+  <div class="clearfix">
+    <div class="col col-12 bg-white grey">
+      <div class="col-12 flex items-center justify-between p2 bg-orange white">
+        <div>累计份数</div><div>{{ sold }}份</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p2 border-top" v-for="item in list">
+        <div class="col-2 flex flex-wrap content-between">
+          <img class="circle" v-lazy="item.avatar" style="width: 3rem;height: 3rem">
+        </div>
+        <div class="col-10 flex flex-wrap content-center">
+          <div class="col-12 flex items-center justify-between">
+            <div class="col-6 flex items-center justify-start">{{ item.nick }}</div>
+            <div class="col-6 flex items-center justify-end silver h5">{{ item.time }}</div>
+          </div>
+          <div class="col-12 flex items-center justify-between silver h5">
+            <div class="col-10 flex items-center justify-start">{{ item.name }}</div>
+            <div class="col-2 flex items-center justify-end">{{ item.num }}份</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <foot></foot>
+  </div>
+</layout>

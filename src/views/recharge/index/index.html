@@ -1,0 +1,66 @@
+<layout>
+  <b slot="center" class="p2 grey">我的余额</b>
+  <div class="clearfix dark bg-white">
+
+    <transition name="fade" mode="out-in">
+      <div class="modal-mask" v-show="showModal" @click="hideModal">
+        <div class="modal-wrapper">
+          <div class="clearfix p2">
+            <div class="col-12 mx-auto">
+              <a class="right mb2 tip" @click="showTip = !showTip">兑换密码在哪里 ?</a>
+              <input class="input" type="text" id="code" v-model="cardPwd" placeholder="请输入充值卡充值密码">
+              <a rel="modal-btn" class="btn btn-primary center btn-submit disabled" v-if="submitting">
+                <i class="icon-spinner spinning"></i>
+              </a>
+              <a rel="modal-btn" class="btn btn-primary center btn-submit" @click="useCard" v-else>确定</a>
+              <img class="pt2" v-show="showTip" src="http://img01.taover.com/recharge_code.png">
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <div class="clearfix top-wrap">
+      <div class="flex justify-start items-center px2 pt1 pb2">
+        <img class="circle avatar" :src="avatar">
+        <b class="amount pl2"><small>￥</small>{{ amount }}</b>
+      </div>
+      <div class="col-12 flex items-center justify-around">
+        <div class="col-6 px2 center">
+          <router-link class="btn btn-outline btn-buy" :to="{ path: '/goods', query: { id: 327 } }">购买充值卡</router-link>
+        </div>
+        <div class="col-6 px2 center">
+          <a class="btn btn-outline btn-charge" @click="showModal = true">礼品卡充值</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 flex items-center justify-center p2">
+      <div class="col-6 center">
+        <a class="btn btn-tab tab-left active" v-if="tab == 1" @click="changeTab(1)">收入</a>
+        <a class="btn btn-tab tab-left" v-if="tab == 2" @click="changeTab(1)">收入</a>
+      </div>
+      <div class="col-6 center">
+        <a class="btn btn-tab tab-right" v-if="tab == 1" @click="changeTab(2)">支出</a>
+        <a class="btn btn-tab tab-right active" v-if="tab == 2" @click="changeTab(2)">支出</a>
+      </div>
+    </div>
+
+    <div class="col-12 grey bg-white col-12">
+      <div class="py1 px2" v-for="item in lists.list">
+        <div class="col-12 time">{{ item.time }}</div>
+        <div class="col-12 flex items-end justify-between">
+          <div class="col-8">{{ item.title }}</div>
+          <div class="col-4 flex justify-end">￥{{ item.body }}</div>
+        </div>
+      </div>
+
+      <infinite-loading :on-infinite="onInfinite">
+        <div class="center silver p2 col-12">
+          <i class="icon-spinner spinning" v-if="lists.more"></i>
+          <a class="btn more" v-else>没有更多了</a>
+        </div>
+      </infinite-loading>
+    </div>
+  </div>
+</layout>

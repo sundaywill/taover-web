@@ -1,0 +1,31 @@
+.input {
+  height: auto;
+  border-radius: 2rem;
+  margin: 0;
+  padding: .6rem 1rem;
+  color: #555;
+}
+.input:focus {
+  box-shadow: none;
+  outline: none;
+}
+.btn {
+  border-radius: 2rem;
+}
+.btn-primary {
+  padding: .6rem 1rem;
+  background: #ff8820;
+}
+.code .btn {
+  width: 100%;
+  box-sizing: border-box;
+}
+.login {
+  width: 100%;
+}
+.logo {
+  width: 100%;
+}
+.disabled {
+  background: #ccc;
+}

@@ -1,0 +1,98 @@
+<layout>
+  <b slot="center" class="p2 grey">我要掺和</b>
+  <div class="clearfix dark bg-silver">
+    <refresh-loading :top-method="refresh" ref="top">
+      <div class="col col-12 bg-white grey">
+        <img :src="comments.project.img" style="width: 100%">
+        <div class="flex items-center justify-around bg-light">
+          <a class="col-6 btn">
+            <div class="col-12 border-box center border-right">
+              <i class="icon-heart"></i> 赞 {{ comments.project.zans }}
+            </div>
+          </a>
+          <router-link class="col-6 btn" :to="{ path: '/comment/reply', query: { id: comments.project.id } }">
+            <div class="col-12 border-box center">
+              <i class="icon-commenting"></i> 掺和 {{ comments.project.comments }}
+            </div>
+          </router-link>
+        </div>
+        <div class="px2 pt2 center h3 bold black">{{ comments.project.name }}</div>
+        <div class="flex items-center justify-around border-bottom p2">
+          <router-link class="btn btn-primary center" :to="{ path: '/comment/reply', query: { id: comments.project.id } }">我要掺和</router-link>
+        </div>
+      </div>
+
+      <div class="col col-12 bg-white border-top border-bottom mt2" :id="'c' + index" v-for="(item, index) in comments.list">
+        <div class="col col-12 px2 pt2">
+          <div class="col col-2 pr1">
+            <avatar :size="3" :username="item.nick" v-if="item.avatar == null"></avatar>
+            <img class="circle width-3" v-lazy="item.avatar" v-else>
+          </div>
+          <div class="col col-10">
+            <div class="flex items-center justify-between pb1">
+              <div class="flex flex-wrap content-around">
+                <div class="col-12 orange bold">{{ item.nick }}</div>
+                <div class="col-12 h5 grey">{{ item.time }}</div>
+              </div>
+              <div class="bg-orange white rounded h5" style="padding: .3rem" v-show="item.type == 1">采纳</div>
+              <div class="bg-teal white rounded h5" style="padding: .3rem" v-show="item.type == 2">置顶</div>
+            </div>
+            <div>{{ item.content }}</div>
+            <div class="col-12 flex flex-wrap items-center content-center">
+              <router-link class="pt1" :to="{ path: 'comment/images', query: { i: index, a: a } }"
+                           v-for="(img, a) in item.imgs" v-if="item.imgs.length == 1">
+                <img class="img-1" v-lazy="img + '@20q'">
+              </router-link>
+              <router-link class="bg-img" :class="item.imgs.length % 2 == 0 ? 'bg-img-2' : 'bg-img-3'"
+                           :to="{ path: 'comment/images', query: { i: index, a: a } }"
+                           v-lazy-bg="img + '@20q'" v-for="(img, a) in item.imgs" v-if="item.imgs.length > 1">
+              </router-link>
+            </div>
+          </div>
+        </div>
+
+        <div class="col col-12 flex items-center justify-end grey px2">
+          <a class="p2" :class="item.zaned ? 'orange' : 'grey'" @click="zan(index, comments.project.id, item.id)">
+            <i class="icon-heart"></i> {{ item.zans.length == undefined ? 0 : item.zans.length }}
+          </a>
+          <router-link class="p2 grey" :to="{ path: '/comment/reply', query: { i: index, id: comments.project.id, pid: item.id } }">
+            <i class="icon-commenting"></i> {{ item.replies.length }}
+          </router-link>
+          <!--<router-link class="p2 grey" :to="{ path: 'comment', query: { i: index, id: item.id } }">
+            <i class="icon-commenting"></i>
+          </router-link>-->
+        </div>
+
+        <div class="col col-12 px2 pb1" v-if="item.zans != false || item.replies != false">
+          <div class="col col-12 px1 py1 border-top bg-light" v-if="item.zans != false">
+            <div class="flex items-start justify-start">
+              <a v-for="(zan, ind) in item.zans">
+                <avatar class="left avatar" :size="2" :username="zan.nick" v-if="zan.avatar == null"></avatar>
+                <img class="circle width-2 left avatar" :src="zan.avatar" v-else>
+              </a>
+            </div>
+          </div>
+
+          <div class="col col-12 px1 pt1 border-top bg-light" v-if="item.replies != false">
+            <router-link class="col col-12 border-box pb1" v-for="reply in item.replies"
+                         :to="{ path: '/comment/reply', query: { i: index, id: comments.project.id, pid: item.id, rid: reply.id } }">
+              <span class="orange">{{ reply.nick }}</span>
+              <span v-if="reply.replyto != null">
+                    <span class="silver">回复</span>
+                    <span class="orange">{{ reply.replyto }}</span>
+                  </span>
+              <span class="grey">：{{ reply.content }}</span>
+            </router-link>
+          </div>
+        </div>
+      </div>
+
+      <infinite-loading :on-infinite="onInfinite">
+        <div class="col col-12 center silver p2">
+          <i class="icon-spinner spinning" v-if="comments.more"></i>
+          <a class="btn more" v-else>没有更多了</a>
+        </div>
+      </infinite-loading>
+    </refresh-loading>
+  </div>
+</layout>

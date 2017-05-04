@@ -1,0 +1,9 @@
+<layout>
+  <gallery>
+    <gallery-item v-for="img in images">
+      <a href="javascript:history.go(-1)">
+        <img v-bind:src="img" style="width: 100%">
+      </a>
+    </gallery-item>
+  </gallery>
+</layout>

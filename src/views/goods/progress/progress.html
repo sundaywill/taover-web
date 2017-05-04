@@ -1,0 +1,28 @@
+<layout>
+  <b slot="center" class="p2 grey">项目过程</b>
+  <div class="clearfix grey bg-slight overflow-hidden">
+    <div class="col col-12" id="progress">
+      <div class="col col-12 bg-white">
+        <div class="col col-12 border-box p2">
+          <div class="flex items-center justify-between col-12" v-for="item in progress">
+            <div class="col-3" :class="(item.current == 1 || item.current == 2) ? 'green' : 'grey'">
+              <i class="icon-search"></i> {{ item.label }}
+              <span class="h5" v-if="item.type != 4 && item.title != null">{{ item.start_time }}</span>
+            </div>
+            <div class="col-1 border-right flex items-center justify-end mr2 py2">
+              <i class="icon-circle dot" :class="(item.current == 1 || item.current == 2) ? 'green' : 'gray'"></i>
+            </div>
+            <div class="col-8 p1">
+              <router-link :class="(item.current == 1 || item.current == 2) ? 'green' : 'grey'"
+                           :to="{ path: '/article', query: { id: item.id, pid: item.project_id } }"
+                           v-if="item.type != 4 && item.title != null">{{ item.title }}</router-link>
+              <div :class="(item.current == 1 || item.current == 2) ? 'green' : 'grey'" v-else>{{ item.start_time + '-' + item.end_time }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <foot></foot>
+  </div>
+</layout>

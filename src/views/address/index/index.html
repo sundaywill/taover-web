@@ -1,0 +1,38 @@
+<layout>
+  <b slot="center" class="p2 grey">收货地址</b>
+  <div class="clearfix bg-silver">
+    <refresh-loading :top-method="refresh" ref="top">
+      <div class="col-12 flex flex-wrap content-start bg-white mt2" v-for="(item, index) in addresses">
+        <router-link class="col-12" :to="{ path: '/index' }">
+          <div class="col-12 flex justify-between items-center border-silver bg-white p1">
+            <div class="grey col-12 flex flex-wrap content-center">
+              <div class="col-12 flex items-center justify-between h3">
+                <div><i class="icon-user mr1"></i><span>{{ item.consignee }}</span></div>
+                <div class="mr3"><i class="icon-phone mr1"></i><span>{{ item.mobile }}</span></div>
+              </div>
+              <div class="flex items-center pt1">
+                <i class="icon-map-marker mr1 h3"></i><span>{{ item.address }}</span>
+              </div>
+            </div>
+          </div>
+        </router-link>
+        <div class="col-12 flex items-center justify-between border-top">
+          <a class="gray action" @click="setDefault(index, item.address_id)">
+            <div class="flex items-center p1">
+              <i class="icon-check-square-o orange" v-if="item.is_default == 1"></i>
+              <i class="icon-square-o" v-else></i><span class="pl1">默认地址</span>
+            </div>
+          </a>
+          <div class="flex items-center">
+            <a class="gray action p1" href="/Address/edit/id?jump=">
+              <i class="icon-edit"></i><span class="pl1">编辑</span>
+            </a>
+            <a class="gray action p1">
+              <i class="icon-trash-o"></i><span class="pl1">删除</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </refresh-loading>
+  </div>
+</layout>

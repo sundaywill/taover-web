@@ -1,0 +1,47 @@
+.input {
+  height: auto;
+  border-radius: 2rem;
+  margin: 0;
+  padding: .6rem 1rem;
+  color: #555;
+}
+.input:focus {
+  box-shadow: none;
+  outline: none;
+}
+.btn {
+  border-radius: 2rem;
+}
+.btn-primary {
+  padding: .6rem 1rem;
+  background: #ff8820;
+}
+.code {
+  width: 80%;
+}
+.code .btn {
+  width: 100%;
+  box-sizing: border-box;
+}
+.login {
+  width: 100%;
+}
+.logo {
+  width: 100%;
+}
+.disabled {
+  background: #ccc;
+}
+.main {
+  background: #fff no-repeat;
+  background-image: url("http://ty-image-01.img-cn-qingdao.aliyuncs.com/invite-bg.png@30q.png");
+  background-size: 100% 100%;
+  height: 100%;
+}
+.invite-name, .invite-tip {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.invite-name {
+  color: #da6c1e;
+}

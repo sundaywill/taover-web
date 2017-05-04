@@ -1,0 +1,9 @@
+<layout>
+  <b slot="center" class="p2 grey">修改昵称</b>
+  <div class="py3 flex justify-center flex-wrap bg-white">
+    <input class="border rounded border-ccc py1 font-16 col-10" v-model="nickname" style="text-indent:1em;" type="text" placeholder="请输入新昵称"/>
+    <p class="block col-10 h5 mt1" style="color:#797878">2~8个字符，可使用汉字、字母、数字、下划线</p>
+    <a class="block col-10 bg-btn border-none white h4 center mt2 rounded py1" @click="modifyNick" href="javascript:void(0)">提交修改</a>
+  </div>
+  <foot></foot>
+</layout>

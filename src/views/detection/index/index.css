@@ -1,0 +1,32 @@
+html, body {
+  color: #3f3f3f;
+  overflow-x: hidden;
+}
+.white {
+  color: #fff;
+}
+.light-orange {
+  color: #FF9915;
+}
+.btn-detecs2 {
+  background: #FF9915;
+  border-radius: 3rem;
+  box-shadow: 0 1px 0 1px #ed6c00;
+}
+.v-container {
+  background: #FFAF32;
+  padding: 1rem;
+  text-align: center;
+  margin: auto;
+}
+.v-detec {
+  font-size: 1.6rem;
+  color: #fff;
+  margin-top: .5rem;
+}
+.v-sampling {
+  font-size: 1.1rem;
+  color: #FFEE80;
+  float: right;
+  margin-top: -4rem;
+}

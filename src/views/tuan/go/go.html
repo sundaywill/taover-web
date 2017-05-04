@@ -1,0 +1,83 @@
+<layout>
+  <b slot="center" class="p2 grey">我要开团</b>
+  <div class="clearfix dark">
+    <div class="col col-12 center">
+      <img :src="tuan.img" style="width: 100%">
+      <div class="p2 bg-lighten-4 relative bold fs-13 title">{{ tuan.name }}</div>
+    </div>
+
+    <div class="col col-12 px2 bg-white">
+      <div class="flex items-center justify-start py2 border-bottom">
+        <span>成团价格：</span>
+        <span class="orange"><span class="fs-13">{{ tuan.price }}</span>元 </span>
+        <span class="grey line-through">（原价{{ tuan.shop_price }}元）</span>
+      </div>
+      <div class="flex items-center justify-start py2 border-bottom">
+        <span>发货时间：{{ tuan.delivery_at }}</span>
+      </div>
+      <div class="flex flex-wrap content-center py2 border-bottom">
+        <div class="col-12">奖励说明：{{ tuan.reward }}</div>
+        <div class="bg-silver center m2 p2 col-12 tips" v-if="tuan.special != undefined">
+          <div class="flex justify-center">
+            <b>特权：</b>
+            <div style="text-align: left" v-html="tuan.special"></div>
+          </div>
+        </div>
+        <div><span>成团{{ tuan.type }}数：</span>
+          <span class="orange"><span class="fs-13">{{ tuan.nums }}</span>{{ tuan.type }}</span>
+          <span v-if="tuan.ptype == 1">（同一账户购买多份视为一人）</span>
+          <span v-else>（同一账户可购买{{ tuan.quota }}份）</span>
+        </div>
+      </div>
+      <div class="flex flex-wrap content-around py2">
+        <div class="orange bold pb1">* 支付开团1小时内，未满{{ tuan.nums }}{{ tuan.type }}自动退款</div>
+        <div class="orange bold" v-if="tuan.ptype == 2">* 所有商品均配送至开团人地址。</div>
+      </div>
+      <div class="flex items-center justify-center pb2">
+        <a class="btn btn-primary col-12 center fs-13" @click="open">我要开团</a>
+      </div>
+    </div>
+
+    <div class="col col-12 bg-white">
+      <img src="http://m.taover.com/themes/default/images/tuanrule.jpg" style="width: 100%" v-if="tuan.ptype == 1">
+      <img src="http://m.taover.com/themes/default/images/tuantulenew.jpg" style="width: 100%" v-else>
+      <div class="p2 grey">
+        <div class="bold">详细说明：</div>
+        <div v-if="tuan.ptype == 1">
+          <div class="my1" v-if="tuan.rank < 3">
+            <div><b>三级以下吃货</b></div>
+            <div>1. 开团人支付后视为开团；</div>
+            <div>2. 成团人数为下单人数，而非份数；</div>
+            <div>3. 同一账户可购买多次，但仍按一人计算；</div>
+            <div>4. 开团{{ tuan.hours }}小时内达到成团人数则成团；</div>
+            <div>5. 满团后截团；</div>
+            <div>6. {{ tuan.hours }}小时内未达到成团人数，全额退款；</div>
+            <div>7. 退款在5日内原路返回到支付账号。</div>
+          </div>
+          <div class="my1" v-else>
+            <div><b>三级及以上吃货</b></div>
+            <div>1. 开团人支付后视为开团；</div>
+            <div>2. 成团人数为下单人数，而非份数；</div>
+            <div>3. 同一账户可购买多次，但仍按一人计算；</div>
+            <div>4. 开团{{ tuan.hours }}小时内达到成团人数则成团；</div>
+            <div>5. 满团且开团{{ tuan.hours }}小时内仍可继续下单；</div>
+            <div>6. {{ tuan.hours }}小时内未达到成团人数，则全额退款；</div>
+            <div>7. 退款在5日内原路返回到支付账号。</div>
+          </div>
+        </div>
+        <div class="my1" v-else>
+          <div>1. 开团人支付后视为开团；</div>
+          <div>2. 成团数为下单的份数，而非人数；</div>
+          <div>3. 1人可购买多次，都计入份数；</div>
+          <div>4. 开团{{ tuan.hours }}小时内达到成团份数则成团；</div>
+          <div>5. 满团后截团；</div>
+          <div>6. {{ tuan.hours }}小时内未达到成团人数，则全额退款；</div>
+          <div>7. 退款在5日内原路返回到支付账号。</div>
+        </div>
+        <router-link class="orange underline" to="/integrals/rule">？如何增长自己的吃货等级 >></router-link>
+      </div>
+    </div>
+  </div>
+
+  <foot></foot>
+</layout>

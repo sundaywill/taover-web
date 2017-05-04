@@ -1,0 +1,10 @@
+.value {  font-size: 5rem;  }
+.fs2 {  font-size: 2rem;  }
+.fs-14 {  font-size: 1.4rem;  }
+.fs-12 {  font-size: 1.2rem;  }
+.invalid {  border-bottom: 1px solid #999;padding: 2px;  }
+.card {  border-radius: .5rem;  border: none;  box-shadow: 0 0 .3rem 0 #aaa;  }
+.bg-gradient-teal {  background-image: linear-gradient(-45deg, #81ffa3, #57cdb8);  }
+.bg-gradient-pink {  background-image: linear-gradient(-45deg, #ffc053, #f6829d);  }
+.bg-gradient-blue {  background-image: linear-gradient(-45deg, #a9e7ff, #559bea);  }
+.bg-gradient-purple {  background-image: linear-gradient(-45deg, #d693ff, #5963ee);  }

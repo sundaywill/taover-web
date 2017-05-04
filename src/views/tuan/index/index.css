@@ -1,0 +1,45 @@
+.process {
+  border: 1px solid #bbb;
+  padding: 0 .25rem;
+}
+.rounded {
+  border-radius: 3rem;
+}
+.title {
+  margin-top: -4.3rem;margin-bottom: 0;
+  color: #333;
+}
+.fs-13 {
+  font-size: 1.3rem;
+}
+.btn-primary {
+  border-radius: .5rem;
+  padding: 1rem;
+  background: #f45e05;
+  box-sizing: border-box;
+}
+.btn-disabled {
+  background: #ccc;
+}
+.btn-circle {
+  border-radius: 2rem;
+  padding: .5rem 1rem;
+}
+.btn-share {
+  margin-top: 1rem;
+}
+.w2 {
+  width: 1.5rem;
+}
+.master {
+  border: 2px solid orangered;
+}
+.sweet-alert.showSweetAlert > h2 {
+  margin: 1rem 0;
+}
+.width-full {
+  width: 100%;
+}
+.sell-out {
+  font-size: 5rem;margin-top: -10rem;margin-bottom: 5rem;
+}

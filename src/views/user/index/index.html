@@ -1,0 +1,174 @@
+<layout>
+  <b slot="center" class="p2 grey">个人中心</b>
+  <div class="clearfix bg-white">
+    <refresh-loading :method="refresh" ref="top">
+      <div class="clearfix flex items-center p2" style="background: #FEE581;color: #9a5905">
+        <div class="col col-3 pr2">
+          <img class="circle fit" :src="user.avatar">
+        </div>
+        <div class="col col-6">
+          <div><b>{{ user.nick }}</b></div>
+          <div>淘源等级：{{ user.level }}</div>
+          <div>经验分值：{{ user.rank }}</div>
+        </div>
+        <div class="col col-3">
+          <div class="checkin" v-if="user.checked == 1">
+            <router-link class="btn btn-checked right" to="/checkin">已签到</router-link>
+            <span class="orange">明天签到可领取{{ integrals[user.checked_count] }}积分</span>
+          </div>
+          <router-link class="btn btn-primary right" to="/checkin" v-else>签到</router-link>
+        </div>
+      </div>
+      <div class="clearfix flex justify-between border-bottom" style="background: #FFF5CF;color: #9a5905">
+        <router-link class="col-6 center p2 hover-orange" to="/recharge">
+          <div>账户余额</div><div class="orange">￥{{ user.balance }}</div>
+        </router-link>
+        <router-link class="col-6 center p2 hover-orange" to="/coupons">
+          <div>优惠券</div><div class="orange">{{ user.coupons }}</div>
+        </router-link>
+        <router-link class="col-6 center p2 hover-orange" to="/integrals">
+          <div>积分</div><div class="orange">{{ user.integral }}</div>
+        </router-link>
+      </div>
+      <div class="clearfix border-bottom">
+        <div class="clearfix border-bottom">
+          <router-link class="flex items-center justify-start p2 hover-lite" :to="{ path: '/order/orders' }">
+            <div class="col col-11 flex items-center justify-start">
+              <i class="h1 icon-orders orange"></i>
+              <span class="pl2">我的订单</span>
+            </div>
+            <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+          </router-link>
+          <div class="clearfix border-bottom px2">
+            <div class="flex justify-between border-top">
+              <router-link class="col-2 center py2 hover-lite col-1-5" :to="{ path: '/order/orders', query: { type: 1 } }">
+                <i class="h1 icon-waiting-pay orange"></i>
+                <div class="col-12">待付款</div>
+                <sup class="count-tip" v-show="orders.unpaid > 0">{{ orders.unpaid }}</sup>
+              </router-link>
+              <router-link class="col-2 center py2 hover-lite col-1-5" :to="{ path: '/order/orders', query: { type: 2 } }">
+                <i class="h1 icon-waiting-shipping orange"></i>
+                <div class="col-12">待发货</div>
+                <sup class="count-tip" v-show="orders.unshipping > 0">{{ orders.unshipping }}</sup>
+              </router-link>
+              <router-link class="col-2 center py2 hover-lite col-1-5" :to="{ path: '/order/orders', query: { type: 3 } }">
+                <i class="h1 icon-waiting-receive orange"></i>
+                <div class="col-12">待收货</div>
+                <sup class="count-tip" v-show="orders.unreceive > 0">{{ orders.unreceive }}</sup>
+              </router-link>
+              <router-link class="col-2 center py2 hover-lite col-1-5" :to="{ path: '/order/orders', query: { type: 4 } }">
+                <i class="h1 icon-vote orange"></i>
+                <div class="col-12">待投票</div>
+                <sup class="count-tip" v-show="orders.unvote > 0">{{ orders.unvote }}</sup>
+              </router-link>
+              <router-link class="col-2 center py2 hover-lite col-1-5" :to="{ path: '/order/orders', query: { type: 5 } }">
+                <i class="h1 icon-custom-service orange"></i>
+                <div class="col-12">售后</div>
+                <sup class="count-tip" v-show="orders.refund > 0">{{ orders.refund }}</sup>
+              </router-link>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix border-bottom pt1" style="background: #eee"></div>
+      <div class="clearfix border-bottom" v-show="user.role == 1">
+        <a class="flex items-center justify-start p2 hover-lite" href="http://m.taover.com/ImFarmer/farmer?type=1">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-mine-o orange"></i>
+            <span class="pl2">我是买手</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </a>
+      </div>
+      <div class="clearfix border-bottom" v-show="user.role == 2">
+        <a class="flex items-center justify-start p2 hover-lite" href="http://m.taover.com/ImFarmer/farmer?type=2">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-mine-o orange"></i>
+            <span class="pl2">我是农人</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </a>
+      </div>
+      <div class="clearfix border-bottom">
+        <a class="flex items-center justify-start p2 hover-lite" href="http://m.taover.com/Orders/cycles">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-cycles orange"></i>
+            <span class="pl2">我的分期送</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </a>
+      </div>
+      <div class="clearfix border-bottom">
+        <!--<a class="flex items-center justify-start p2 hover-lite" href="http://m.taover.com/Orders/tuans">-->
+        <router-link class="flex items-center justify-start p2 hover-lite" :to="{ path: '/order/tuans' }">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-friends orange"></i>
+            <span class="pl2">我的团购</span>
+            <span class="pl1" v-if="tuans.undone > 0">（待成团 {{ tuans.undone }}）</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </router-link>
+        <!--</a>-->
+      </div>
+      <!--<div class="clearfix border-bottom">
+        <a class="flex items-center justify-start p2 hover-lite" href="http://m.taover.com/Orders/gifts">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-coffee orange"></i>
+            <span class="pl2">我的送礼</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </a>
+      </div>
+      <div class="clearfix border-bottom">
+        <a class="flex items-center justify-start p2 hover-lite" href="http://m.taover.com/Orders/receives">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-gifts orange"></i>
+            <span class="pl2">我的收礼</div>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </a>
+      </div>-->
+      <div class="clearfix border-bottom">
+        <router-link class="flex items-center justify-start p2 hover-lite" to="/redeem">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-redeem orange"></i>
+            <span class="pl2">兑换商品</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </router-link>
+      </div>
+      <div class="clearfix border-bottom pt1" style="background: #eee"></div>
+      <div class="clearfix border-bottom">
+        <a class="flex items-center justify-start p2 hover-lite" href="http://m.taover.com/Address">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-location orange"></i>
+            <span class="pl2">收货地址</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </a>
+      </div>
+      <div class="clearfix border-bottom">
+        <router-link class="flex items-center justify-start p2 hover-lite" to="/user/reset">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-password orange"></i>
+            <span class="pl2">修改密码</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </router-link>
+      </div>
+      <div class="clearfix border-bottom">
+        <router-link class="flex items-center justify-start p2 hover-lite" to="/user/nick">
+          <div class="col col-11 flex items-center justify-start">
+            <i class="h1 icon-mine orange"></i>
+            <span class="pl2">修改昵称</span>
+          </div>
+          <div class="col col-1 flex justify-end"><i class="h3 icon-angle-right"></i></div>
+        </router-link>
+      </div>
+      <div class="clearfix center p2" style="background: #eee">
+        <a class="col-6 btn btn-primary border-box logout-btn" @click="logout">退出登录</a>
+      </div>
+      <foot></foot>
+    </refresh-loading>
+  </div>
+</layout>

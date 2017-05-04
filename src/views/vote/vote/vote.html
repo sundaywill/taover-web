@@ -1,0 +1,363 @@
+<layout>
+  <b slot="center" class="p2 grey">投票</b>
+  <div class="clearfix black bg-slight overflow-hidden bg-white">
+    <!--banner-->
+    <div>
+      <img class="col-12" :src="project.img"/>
+      <p class="center h4 bold">{{project.project_name}}</p>
+      <p class="center h5" v-if="project.maishou_id > 0">
+        <router-link class="orange" :to="{ path: '/maishou', query: { id: project.maishou_id } }">买手：{{project.maishou_name}}</router-link>
+      </p>
+    </div>
+
+    <template v-if="votego == 0">
+      <!--当前投票、以往投票  数量展示-->
+      <template v-if="votego == 0">
+        <div class="flex flex-wrap content-start center bold border-orange" v-if="voteNow != ''">
+          <div class="col-6 py1" :class="isNow ? 'bg-white' : 'bg-gray'" @click="nowOrOld()">
+            当前投票{{voteNow[0].option_count}}人
+          </div>
+          <div class="col-6 py1" :class="!isNow ? 'bg-white' : 'bg-gray'" @click="nowOrOld()">以往投票<span
+            v-if="voteOld != ''">{{voteOld[0].option_count}}人</span></div>
+        </div>
+        <div class="border-bottom pb3" v-if="voteNow != ''">
+          <div class="flex justify-start flex-wrap content-start h5 dark">
+            <div class="" v-for="vote in (isNow ? voteNow : voteOld)"><!--flex justify-start py2-->
+              <div class="flex flex-wrap content-start pt3">
+                <span class="block center vote-option" style="border:none;">{{vote.option_name}}</span>
+                <span class="flex flex-wrap content-center border circle block center vote-option ml2 mr1"
+                      :class="vote.hover=='small' ? 'voted-option' : ''">
+              <span class="col-12 block h3">{{vote.option_small_value}}</span>
+              <span class="col-12 block">{{vote.option_small}}</span>
+            </span>
+                <span class="flex flex-wrap content-center border circle block center vote-option mr1"
+                      :class="vote.hover=='center' ? 'voted-option' : ''">
+              <span class="col-12 block h3">{{vote.option_centre_value}}</span>
+              <span class="col-12 block">{{vote.option_centre}}</span>
+            </span>
+                <span class="flex flex-wrap content-center border circle block center vote-option mr1"
+                      :class="vote.hover=='big' ? 'voted-option' : ''">
+              <span class="col-12 block h3">{{vote.option_big_value}}</span>
+              <span class="col-12 block">{{vote.option_big}}</span>
+            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <!--推荐度-->
+      <div class="border-top" v-if="tuijian == 2 && projectType == 3">
+        <div class="flex justify-start pt2 pl2">
+          <div class="col-8 flex flex-wrap content-center">
+            <div class="col-12 flex justify-between h5">
+              <div  class="bold">试吃团（{{countlist}}）人</div>
+              <div class="flex items-center">
+                <span class="orange self-start">{{baifen}}%</span>
+                <span class="self-start">推荐</span>
+                <span><img class="smile" src="http://ty-image-01.oss-cn-qingdao.aliyuncs.com/images/xiao.png"/></span>
+              </div>
+            </div>
+            <div class="col-12 mt1">
+              <div class="col-12 border border-tuijian" style="height:10px;">
+                <div class="border-tuijian" :class="baifen >= 75 ? 'bg-orange' : 'bg-gray'" style="height:10px;" :style="{ width: baifen + '%' }"></div>
+              </div>
+              <div style="margin-top:-13px;">
+                <img style="margin-left:70%;width:.8em;"
+                     src="http://ty-image-01.oss-cn-qingdao.aliyuncs.com/images/hongjiantou.png"/>
+              </div>
+              <div class="col-12 h6 orange">
+                <span class="inline-block" style="margin-left:60%;">70%上</span><span>线标准</span>
+              </div>
+              <div class="h6" v-if="zhankai==1">
+                <div class="triangle_border_up relative ">
+                  <span class="absolute block"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-2 ml3">
+            <div class="flex items-center justify-center border border-zhankai h5 px1 right orange" @click="open()">
+              <div class="self-baseline"><span>{{ zhankai == 0 ? '展开' : '返回' }}</span></div>
+              <div :class="zhankai == 1 ? 'zhankai1' : 'zhankai0'">
+                <i class="h3" :class="zhankai == 0 ? 'icon-sort-desc' : 'icon-sort-asc'"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="px3 h6" v-if="zhankai==1">
+          <span class="col-12 block border-orange2 py1 center rounded orange">上线条件：超过70%推荐，通过第三方检测</span>
+        </div>
+      </div>
+
+      <!--调查问卷柱状图-->
+      <div class="h5 px2" v-if="zhankai==1">
+        <p class="bold"><i class="icon-align-left orange"></i><span class="ml2">投票结果</span></p>
+        <p>
+          <span>投票人数：</span><span class="orange">{{voteCount}}</span>
+          <span class="pl3">试吃人数：</span><span class="orange">{{countlist}}</span>
+        </p>
+      </div>
+      <div class="clearfix col col-12 flex items-center justify-start p2" v-if="zhankai==1" v-for="item in datasets">
+        <bar :title="item.title" :labels="item.labels" :data="item.data"></bar>
+      </div>
+
+      <!--未投票用户给一个投票按钮提醒去投票-->
+      <div class="col col-12 flex justify-center sui page padded grid" v-if="authenticated == true && isVoted == 0">
+        <router-link class="col col-8 border-box bg-orange white center py2 btn rounded my3" :to="{ path: '/vote/vote', query: { id: pid} }">
+          我要投票获取优惠劵
+        </router-link>
+      </div>
+
+      <!--评论列表-->
+      <div class="clearfix border-top mt2" v-if="votego == 0">
+        <div class="bold p2">评论（{{count}}）人</div>
+
+        <div class="col col-12 bg-silver">
+          <div class="col col-12 bg-white border-top border-bottom mt2 bg-white" :id="'c' + index" v-for="(item, index) in comments">
+            <div class="col col-12 p2">
+              <div class="col col-2 pr1">
+                <avatar :size="3" :username="item.username" v-if="item.log_img == null"></avatar>
+                <img class="circle width-3" v-lazy="item.log_img" v-else>
+              </div>
+              <div class="col col-10">
+                <div class="flex items-center justify-between pb1">
+                  <div class="flex flex-wrap content-around">
+                    <div class="col-12 orange bold">{{ item.username }}</div>
+                    <div class="col-12 h5 grey">{{ item.time }}</div>
+                  </div>
+                  <div class="bg-orange white rounded h5" style="padding: .3rem" v-if="item.status_top == 1">采纳</div>
+                  <div class="bg-teal white rounded h5" style="padding: .3rem" v-if="item.status_top == 2">置顶</div>
+                </div>
+                <div>{{ item.content }}</div>
+                <div class="col-12 flex flex-wrap items-center content-center">
+                  <router-link class="col-4 pr1 pt1"
+                               :to="{ path: 'images', query: { i: i, a: item.imgs } }"
+                               v-for="(img, i) in item.imgs">
+                    <img v-lazy="img + '@10q'"/>
+                  </router-link>
+                </div>
+
+                <div class="col col-12 grey pt2">
+                  <div class="flex items-center justify-around bg-silver">
+                    <a class="col-6 btn" @click="zan(index, comments.project_id, item.comment_id)">
+                      <div class="col-12 border-box center border-right" :class="item.iszan == 1 ? 'orange' : ''">
+                        <i class="icon-heart"></i> 赞 {{ item.zans == undefined ? 0 : item.zans }}
+                      </div>
+                    </a>
+                    <router-link class="col-6 btn" :to="{ path: '/vote/reply', query: { i: index, id: item.project_id, pid: item.comment_id, vid: voteId, p_name: item.username} }">
+                      <div class="col-12 border-box center border-right">
+                        <i class="icon-commenting"></i> 回复 {{ item.subs.length }}
+                      </div>
+                    </router-link>
+                    <!--<router-link class="col-6 btn" :to="{ path: 'comment', query: { i: index, id: item.comment_id } }">
+                      <div class="col-12 border-box center"><i class="icon-commenting"></i> 分享</div>
+                    </router-link>-->
+                  </div>
+                </div>
+
+                <div class="col col-12" v-if="item.zaners != false">
+                  <div class="flex items-start justify-between py1">
+                    <div class="col-1 flex items-start justify-start py1 pl1">
+                      <i class="icon-heart orange"></i>
+                    </div>
+                    <div class="col-11 pl1">
+                      <a v-for="(zan, ind) in item.zaners" track-by="$index">
+                        <avatar class="left avatar" :size="2" :username="zan.username" v-if="zan.log_img == null"></avatar>
+                        <img class="circle width-2 left avatar" v-lazy="zan.log_img" v-else>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col col-12 h5" v-if="item.subs != ''">
+                  <router-link class="col col-12 border-box dark" v-for="reply in item.subs"
+                               :to="{ path: '/vote/reply', query: { i: index, id: item.project_id, pid: item.comment_id, vid: voteId, p_name: reply.username } }">
+                    <div class="col col-12 py1 border-top">
+                      <div class="col col-12 flex items-center justify-start">
+                        <avatar :size="2" :username="reply.username" v-if="reply.log_img == null"></avatar>
+                        <img class="circle width-2 left avatar" v-lazy="reply.log_img" v-else>
+                        <div class="flex flex-wrap content-center px1">
+                          <div class="orange bold col-12">{{ reply.username }}</div>
+                          <div class="h5 grey col-12">{{ reply.time }}</div>
+                        </div>
+                      </div>
+                      <div class="col col-12"><span v-if="reply.replyto != null">回复 <span class="orange bold">{{ reply.replyto }}</span>： </span>{{ reply.content }}</div>
+                    </div>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--<infinite-loading :on-infinite="onInfinite">
+            <div class="col col-12 center silver p2">
+              <i class="icon-spinner spinning" v-if="more == 1"></i>
+              <a class="btn more" v-else>没有更多了</a>
+            </div>
+          </infinite-loading>-->
+          <div class="col col-12 center px3 bg-white">
+            <a class="btn btn-primary bg-orange white center col-12"  @click="getList (pid, skip, take)" href="javascript:void(0)">
+              <span v-if="more == 1">加载更多</span>
+              <span v-else>没有更多了</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template v-if="authenticated == true && isVoted == 0 && votego == 1">
+      <!--投票-->
+      <div class="px2">
+        <p class="left-align h4 bold mb1">综合评价</p>
+        <div class="border-top border-bottom" v-if="toVoteNow[0] != ''">
+          <div class="flex justify-start flex-wrap content-center h5 dark pt2">
+            <div class="col-3 px1" v-for="(now, index) in toVoteNow"><!--flex justify-start py2-->
+              <div class="col-12 flex flex-wrap content-center" v-if="index == 0">
+                <div class="col-12 py3" v-for="name in now">
+                  <span class="table-cell align-middle">{{ name.option }}</span>
+                </div>
+              </div>
+              <span class="flex flex-wrap content-start" v-else>
+                <label class="border circle block center vote-option mb2" :class="now[0].option_value==option1 ? 'voted' : ''">
+                  <input name="option1" v-model="option1" :value="now[0].option_value" type="radio" class="display-none">{{now[0].option}}
+                </label>
+                <label class="border circle block center vote-option mb2" :class="now[1].option_value==option2 ? 'voted' : ''">
+                  <input name="option2" v-model="option2" :value="now[1].option_value" type="radio" class="display-none">{{now[1].option}}
+                </label>
+                <label class="border circle block center vote-option mb2" :class="now[2].option_value==option3 ? 'voted' : ''">
+                  <input name="option3" v-model="option3" :value="now[2].option_value" type="radio" class="display-none">{{now[2].option}}
+                </label>
+                <label class="border circle block center vote-option mb2" :class="now[3].option_value==option4 ? 'voted' : ''">
+                  <input name="option4" v-model="option4" :value="now[3].option_value" type="radio" class="display-none">{{now[3].option}}
+                </label>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--评论、问卷调查-->
+      <div class="px2 pt1 pb3">
+        <p class="bold">晒图说感受</p>
+        <div class="col col-12">
+        <textarea class="col col-12 h4 p1 border border-df rounded h5" style="height:7em;" rows="5"
+                  title="" v-model="content" placeholder="在这里输入你想说的话..."></textarea>
+        </div>
+        <div class="col col-12 py1 flex items-center justify-between h2">
+          <div>
+            <a class="btn" :class="showEmojis ? 'orange' : 'grey'" v-show="!iswx"
+               @click="showEmojis = !showEmojis"><i class="icon-smile-circle"></i></a>
+            <a class="btn grey" :class="uploading ? 'orange' : 'grey'"
+               @click="uploadWx" v-if="iswx"><i class="icon-picture-circle"></i></a>
+            <a class="btn grey" :class="uploading ? 'orange' : 'grey'"
+               onclick="uploader.click()" v-else><i class="icon-picture-circle"></i></a>
+            <input class="hide" type="file" accept="image/*" multiple id="uploader" ref="uploader" @change="upload">
+          </div>
+        </div>
+        <div class="col col-12 px2 center" transition="fade" v-show="showEmojis">
+          <div class="border center rounded emojis">
+            <a class="btn emoji" @click="typeEmoji(e)" v-for="e in emojis">{{ e }}</a>
+          </div>
+        </div>
+        <div class="col col-12 px1 center flex justify-start" transition="fade" v-show="imgs.length > 0">
+          <div class="col-4 p1" transition="fade" v-for="(img, index) in locals">
+            <div class="bg-img" v-lazy-bg="img"></div>
+            <a class="btn remove" @click="deleteImg(index)"><i class="icon-times-circle"></i></a>
+          </div>
+        </div>
+
+        <!--问卷调查-->
+        <form name="questionnaire">
+          <div class="col col-12" v-if="subData != ''">
+            <p class="bold mt3 border-bottom pb2 border-df">调查问卷</p>
+            <p class="grey" style="height:20px;border-color:#333;word-break:break-all;">{{shoming}}</p>
+            <div class="mt3">
+              <div class="grey px2 py1 border-dotted" v-for="(item, index) in subData">
+
+                <!--填空（必填）-->
+                <div v-if="item.type == 1 && item.isbixuan == 1">
+                  <span class="orange">{{index}}:【必填】</span>{{item.timu}}<br/>
+                  <input class="col-11 rounded border-67 my1 p1 h5" type="text" :name="'tk' + item.id" :tmid="item.id" :flag="item.isbixuan">
+                  <!--p>亲，该字段必须填写哦~~</p-->
+                </div>
+                <!--填空（选填）-->
+                <div v-else>
+                  <div v-if="item.type == 1">
+                    <span class="orange">{{index}}:【选填】</span>{{item.timu}}<br/>
+                    <input class="col-11 rounded border-67 my1 p1 h5" type="text" :name="'tk' + item.id" :tmid="item.id" :flag="item.isbixuan">
+                  </div>
+                </div>
+
+                <!--文本域（必填）-->
+                <div v-if="item.type == 2 && item.isbixuan == 1">
+                  <span class="orange">{{index}}:【必填】</span>{{item.timu}}<br/>
+                  <textarea class="col-11 rounded border-67 my1 p1 h5" :name="'tk' + item.id" :tmid="item.id" :flag="item.isbixuan"></textarea>
+                  <!--p>亲，该字段必须填写哦~~</p-->
+                </div>
+                <!--文本域（选填）-->
+                <div v-else>
+                  <div v-if="item.type == 2">
+                    <span class="orange">{{index}}:【选填】</span>{{item.timu}}<br/>
+                    <textarea class="col-11 rounded border-67 my1 p1 h5" :name="'tk' + item.id" :tmid="item.id" :flag="item.isbixuan"></textarea>
+                  </div>
+                </div>
+
+                <!--单选（必填）-->
+                <div v-if="item.type == 3 && item.isbixuan == 1">
+                  <span class="orange">{{index}}:【必填】</span>{{item.timu}}<br/>
+                  <div v-for="zv in item.sub">
+                    <label class="h5 my1 inline-block">
+                      <input type="radio" :name="'tk' + item.id" :value="zv.id" :tmid="item.id" :flag="item.isbixuan">{{zv.xz}}<br>
+                    </label><br>
+                  </div>
+                  <!--p>亲，该字段必须填写哦~~</p-->
+                </div>
+                <!--单选（选填）-->
+                <div v-else>
+                  <div v-if="item.type == 3">
+                    <span class="orange">{{index}}:【选填】</span>{{item.timu}}<br/>
+                    <template v-for="zv in item.sub">
+                      <label class="h5 my1 inline-block">
+                        <input type="radio" :name="'tk' + item.id" :value="zv.id" :tmid="item.id" :flag="item.isbixuan">{{zv.xz}}<br>
+                      </label><br>
+                    </template>
+                  </div>
+                </div>
+
+                <!--多选（必填）-->
+                <div v-if="item.type == 4 && item.isbixuan == 1">
+                  <span class="orange">{{index}}:【必填】</span>{{item.timu}}<br>
+                  <div v-for="(zv, zk) in item.sub">
+                    <label class="h5 my1 inline-block">
+                      <input type="checkbox" :name="'tk' + item.id" :value="zv.id" :tmid="item.id" :flag="item.isbixuan">{{zv.xz}}<br>
+                    </label><br>
+                  </div>
+                  <!--p>亲，该字段必须填写哦~~</p-->
+                </div>
+                <!--多选（选填）-->
+                <div v-else>
+                  <div v-if="item.type == 4">
+                    <span class="orange">{{index}}:【选填】</span>{{item.timu}}<br/>
+                    <div v-for="(zv, zk) in item.sub">
+                      <label class="h5 my1 inline-block">
+                        <input type="checkbox" :name="'tk' + item.id" :value="zv.id" :tmid="item.id" :flag="item.isbixuan">{{zv.xz}}<br>
+                      </label><br>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col col-12 center mt2 pb2">
+            <a class="btn btn-primary bg-orange white center col-6 py2" @click="reply()" v-show="!voting">提交</a>
+            <a class="btn btn-primary bg-orange btn-disabled white center col-6 py2" v-show="voting"><i class="icon-spinner spinning"></i>正在提交...</a>
+          </div>
+        </form>
+      </div>
+    </template>
+
+    <foot></foot>
+  </div>
+</layout>

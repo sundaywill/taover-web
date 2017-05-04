@@ -1,0 +1,3 @@
+.big-tag {  color: #fff;  border-radius: 2rem 0 0 2rem;  right: -1rem;  padding: .3rem .5rem .3rem .8rem;  position: relative;  font-size: .8rem;  float: right  }
+.sold-out {  position: relative;text-align: center;top: -11.8rem;margin-bottom: -12rem;padding: 3.3rem 0;background: rgba(255, 255, 255, 0.8);  }
+.sold-out > i.icon-sell-out {  font-size: 5rem;  }  .border-ddd {  border-color: #ddd;  }

@@ -1,0 +1,31 @@
+<layout>
+  <b slot="center" class="p2 grey">梅子淘源检测</b>
+  <div class="clearfix bg-white">
+    <div class="col col-12 v-container">
+      <div class="white h2 py1">产品名称：{{ detection.product }}</div>
+      <div class="white h2 pb2">国际检测项扫描</div>
+      <s-circle :max="maxNum" ref="detection"></s-circle>
+      <span class="v-sampling">抽样方法<br>随机抽样</span>
+    </div>
+
+    <div class="col col-12 px2 pt2 light-orange h3">
+      <div class="flex justify-between" v-for="item in list">
+        <div>已检{{ item.title }} {{ item.count }} 项</div>
+        <div>全部达标</div>
+      </div>
+    </div>
+
+    <div class="col col-12 py2 mx-auto center">
+      <router-link class="px4 py2 white h3 btn btn-detecs2" :to="{ path: '/detection/passing', query: { id: id } }">查看覆盖率与通过率扫描</router-link>
+    </div>
+
+    <div class="col col-12 mx-auto p2 bg-grey grey">
+      <div class="pb1">生产方：{{ detection.producer }}</div>
+      <div class="pb1">检测机构：{{ detection.detector }}</div>
+      <div class="pb1">检测时间：{{ detection.time }}</div>
+      <div class="silver">以上检测结果仅对样品负责</div>
+    </div>
+
+    <foot></foot>
+  </div>
+</layout>

@@ -1,0 +1,28 @@
+<layout>
+  <b slot="center" class="p2 grey">登录</b>
+  <div class="clearfix flex justify-center items-center bg-white">
+    <div class="col-10 sm-col-9 md-col-8 lg-col-8">
+      <div class="clearfix mx-auto p2">
+        <div class="flex justify-center items-center my2">
+          <div class="col-4">
+            <img class="logo circle" src="http://img01.taover.com/images/tylife-circle.png">
+          </div>
+        </div>
+        <div class="flex justify-center items-center my2">
+          <input type="tel" class="input center" placeholder="请输入手机" v-model="user.username">
+        </div>
+        <div class="flex justify-center items-center my2">
+          <input type="password" class="input center" placeholder="请输入密码" v-model="user.password">
+        </div>
+        <div class="flex justify-center items-center my2">
+          <a class="btn btn-primary center login" @click="login" v-if="verified">登 录</a>
+          <a class="btn btn-primary center login disabled" v-else>登 录</a>
+        </div>
+        <div class="flex justify-between items-center my2">
+          <router-link class="btn center btn-outline register" to="/register">去注册</router-link>
+          <router-link class="btn center btn-outline forget" to="/forget">忘记密码</router-link>
+        </div>
+      </div>
+    </div>
+  </div>
+</layout>

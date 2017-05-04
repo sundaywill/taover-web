@@ -1,0 +1,43 @@
+.bg {
+  background: transparent;
+  background-position: top;
+  background-repeat: no-repeat;
+}
+.bg-main {
+  background-image: url("http://ty-image-01.oss-cn-qingdao.aliyuncs.com/images/89-2.png");
+  background-size: 100% 100%;
+  font-size: 1rem;
+  font-weight: 400;
+}
+.bg-card {
+  background-image: url('http://img01.taover.com/images/89-3.png');
+  background-size: 100% 100%;
+  border-radius: .5rem;
+}
+.bg-coin {
+  background-image: url("http://img01.taover.com/images/89-1.png");
+  background-size: 2.2rem;
+}
+.bg-cover {
+  margin-top: -5.1rem;
+  margin-bottom: 0;
+  padding: 0;
+  border-radius: .5rem;
+  background: rgba(255, 90, 16, 0.8);
+}
+.bg-cover {
+  padding: .85rem 0;
+}
+.bg-cover>img {
+  width: 2rem;
+}
+.p0 {
+  padding: 0;
+}
+.py09 {
+  padding: .9rem 0;
+}
+.p07 {
+  padding: .5rem;
+  width: 5rem;
+}

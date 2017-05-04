@@ -1,0 +1,56 @@
+<layout>
+  <b slot="center" class="p2 grey">商品兑换</b>
+  <div class="clearfix">
+    <div class="flex justify-between items-center p2 bg-white">
+      <input class="input col-9 mr1" type="text" placeholder="请输入兑换码" v-model="voucher">
+      <a class="btn btn-primary center col-3" v-if="voucher == null || voucher == ''">验 证</a>
+      <a class="btn btn-primary center col-3" @click="verify" v-else>验 证</a>
+    </div>
+    <div class="flex justify-center items-center px2 pb2 bg-white" v-show="!redeem.verified && tip != null">
+      <i class="icon-info-circle orange h2 pr1"></i><span>{{ tip }}</span>
+    </div>
+    <div class="border-top border-silver bg-light pt1" v-show="redeem.verified">
+      <div class="flex justify-center items-center border-top border-silver bg-white">
+        <img :src="redeem.goods.img" style="width: 100%">
+      </div>
+      <div class="flex justify-start items-center border-bottom border-silver bg-white px2 py2" v-show="redeem.goods.detec != ''">
+        <img v-lazy="redeem.goods.icon" style="height: 3rem">
+        <div class="pl2">
+          <div class="h3">{{ redeem.goods.name }}</div>
+          <b class="orange">{{ redeem.goods.detec }}</b>
+        </div>
+      </div>
+      <router-link :to="'redeem/address'">
+        <div class="flex justify-between items-center border-bottom border-silver bg-white px2 py2">
+          <div class="grey col-11">
+            <div class="flex justify-between items-center h3">
+              <div><i class="icon-user mr1"></i><span>{{ redeem.address.consignee }}</span></div>
+              <div class="mr3"><i class="icon-phone mr1 ml3"></i><span>{{ redeem.address.mobile }}</span></div>
+            </div>
+            <div class="flex items-center pt1">
+              <i class="icon-map-marker mr1 h3"></i><span class="h4">{{ redeem.address.address }}</span>
+            </div>
+          </div>
+          <div class="orange col-1">
+            <i class="icon icon-chevron-circle-right h1"></i>
+          </div>
+        </div>
+      </router-link>
+      <div class="flex justify-between items-center border-bottom border-silver bg-white px2 py2">
+        <div class="mr1">发货地：</div><div class="ml1">{{ redeem.goods.place }}</div>
+      </div>
+      <div class="flex justify-between items-center border-bottom border-silver bg-white px2 py2">
+        <div class="mr1">配送方式：</div><div class="ml1">（{{ redeem.goods.express }}）免运费</div>
+      </div>
+      <div class="flex justify-between items-center border-bottom border-silver bg-white px2 py2">
+        <div class="mr1">预计发货时间：</div><div class="ml1">{{ redeem.goods.delivery }}</div>
+      </div>
+      <div class="flex flex-wrap content-center border-top border-silver bg-white p2 mt1">
+        <textarea class="border rounded col col-12 border-gray h4" rows="3" placeholder="给梅子淘源留个言" v-model="message"></textarea>
+      </div>
+      <div class="flex justify-between items-center bg-white px2 pb2" @click="submit">
+        <a class="btn btn-primary center col-3" style="width: 100%">开始兑换</a>
+      </div>
+    </div>
+  </div>
+</layout>

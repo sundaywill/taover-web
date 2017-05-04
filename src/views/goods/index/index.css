@@ -1,0 +1,25 @@
+.bg-gray {  background-color: #cdcdcd;  }
+.bg-green8 {  background-color: #84c611;  }
+.bg-slight {  background: #f3f3f3;  }
+.bg-red {  background-color: #ff4200;  }
+.bg-red7 {  background-color: #ff7612;  }
+.h3.bold {  font-weight: bolder;  }
+.p0 {  padding: 0;  }  .h3 {  font-weight: 400;  }
+.btn-orange {  background: #ff8a00;  color: #fff;  border-radius: 5rem;  }
+.icon-circle.dot {  margin-right: -.5rem;  }  .bg-orange-light {  background: orange;  }
+.rounded-top {  border-top-left-radius: .5rem;  border-top-right-radius: .5rem;  }
+.rounded-bottom {  border-bottom-left-radius: .5rem;  border-bottom-right-radius: .5rem;  }
+.bg-img {  background: #eee;  background-repeat: no-repeat;  background-size: 100% auto;
+  background-position: center;  padding: 2rem 0;  width: 30%;  margin: 0 3% .5rem 0;  }
+.btn-link {  border-bottom: 2px solid #FF851B;  padding: 2px  }
+.percent {  border-top-left-radius: .5rem;border-top-right-radius: .5rem;  }
+.progress {  border-radius: 2rem;  border-color: #FF851B;  margin: 0 .5rem;
+  vertical-align: bottom;height: 100%;  width: 1rem;  background: #fff;  min-height: 5.5rem;  }
+.progress > div {  border-radius: 2rem;width: 1rem;  }  .py13 {  padding: 1.3rem 0;  }
+.border-orange {  border-color: #ff8a00;  }  .border-rounded {  border-radius: .5rem;  }
+section {  font-size: 1rem!important;  word-break: break-all;  word-wrap: break-word;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;  font-weight: 400;  }
+#project section {  line-height: 1.6rem;  }
+#goods section {  line-height: 1.5rem;  }
+.desc {  text-align: left;  }
+section img {  vertical-align: bottom!important;  }

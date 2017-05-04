@@ -1,0 +1,73 @@
+<keep-alive>
+  <layout>
+      <router-link slot="left" class="circle p1 grey" to="/user" v-if="authenticated">
+        <i class="icon-user-circle" v-if="avatar == ''" style="font-size: 2rem"></i>
+        <img class="circle avatar" :src="avatar" v-else>
+      </router-link>
+      <a slot="left" class="px1 py2 grey" @click="login()" v-else>登录</a>
+
+    <div class="clearfix">
+      <refresh-loading :method="refresh" ref="top">
+
+        <swipe :auto="6000" v-show="slides != undefined">
+          <swipe-item v-for="item in slides">
+            <a :href="item.url"><div class="response-img" :style="{ 'backgroundImage': 'url(' + item.img + ')' }"></div></a>
+          </swipe-item>
+        </swipe>
+
+        <div class="flex justify-around item-center bg-white tabs">
+          <router-link class="p2" :to="tab.link" v-for="tab in tabs"><img v-lazy="tab.img"></router-link>
+        </div>
+
+        <div class="col col-12 p1">
+          <div class="col-12" v-for="(item, index) in projects">
+
+            <div class="clearfix mb1" v-for="banner in item.banners" v-show="item.banners">
+              <a :href="banner.url"><img class="banners" :src="banner.img"></a>
+            </div>
+
+            <router-link :to="{ path: '/goods', query: { id: item.id } }">
+              <div class="flex justify-between item-center mb1 bg-white list-item border border-grey">
+                <div class="col-5 py4 bg-img" v-lazy-bg="item.img + '@90q'"></div>
+                <div class="col-7 flex flex-wrap content-between py2 pl1">
+                  <div class="col-12 flex justify-between">
+                    <div class="col-9">
+                      <div class="col-12 pb1 grey bold">{{ item.title }}</div>
+                      <div class="col-12 h5 pb1 green" v-show="item.detecs && item.detecs.detec && item.taste == 0">
+                        <i class="icon-microscope"></i>{{ item.detecs.detec }}</div>
+                      <div class="col-12 h5 pb1 orange" v-show="item.recommendation > 0 && item.taste == 1">
+                        <i class="icon-thumbs-o-up"></i> 试吃推荐度{{ item.recommendation }}%</div>
+                      <div class="col-12" v-show="item.prices">
+                        <span class="h2 orange" v-show="item.prices.price_min > 0"><span class="h4">￥</span>{{ item.prices.price_min }}</span>
+                        <span class="h3 orange" v-show="item.prices.price_max > item.prices.price_min">~</span>
+                        <span class="h4 orange" v-show="item.prices.price_max > item.prices.price_min"><span class="h5">￥</span>{{ item.prices.price_max }}</span>
+                      </div>
+                    </div>
+                    <div class="col-3 label h5" v-show="item.formal == 0">
+                      <span style="background: #FF8F35" v-show="item.taste == 1">试吃</span>
+                      <span style="background: #FF5F6B" v-show="item.new == 1">最新</span>
+                      <span style="background: #7ED24E" v-show="item.best == 1">促销</span>
+                      <span style="background: #FF693D" v-show="item.hot == 1">最热</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </router-link>
+
+          </div>
+        </div>
+
+        <div class="col col-12 flex justify-between item-center pb2 bg-light">
+          <router-link class="col-5 py1 mr1 center know-left" :to="{ path: '/article', query: { id: 231 } }">了解梅子淘源</router-link>
+          <router-link class="col-5 py1 ml1 center more-right" to="/project">更多淘源美食</router-link>
+        </div>
+
+        <foot></foot>
+      </refresh-loading>
+
+      <!--<router-link class="fixed bottom-0 right-0 p2 mb4" to="/invite">
+        <img src="http://ty-image-01.oss-cn-qingdao.aliyuncs.com/images/newhongbao.png" style="width: 3rem">
+      </router-link>-->
+    </div>
+  </layout>
+</keep-alive>

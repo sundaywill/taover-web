@@ -1,0 +1,112 @@
+<layout>
+  <b slot="center" class="p2 grey">我的团购</b>
+  <div class="clearfix bg-silver grey">
+
+    <div class="col-12 flex items-center justify-center border-bottom bg-white relative z1">
+      <a class="py2 px1 grey h5" @click="changeList(0)" :class="type == 0 ? ['tab-active'] : ''">所有</a>
+      <a class="py2 px1 grey h5" @click="changeList(1)" :class="type == 1 ? ['tab-active'] : ''">
+        待开团<sup class="count-tag" v-show="counts.unopen > 0">{{ counts.unopen }}</sup></a>
+      <a class="py2 px1 grey h5" @click="changeList(2)" :class="type == 2 ? ['tab-active'] : ''">
+        待成团<sup class="count-tag" v-show="counts.undone > 0">{{ counts.undone }}</sup></a>
+      <a class="py2 px1 grey h5" @click="changeList(3)" :class="type == 3 ? ['tab-active'] : ''">
+        已成团<sup class="count-tag" v-show="counts.success > 0">{{ counts.success }}</sup></a>
+      <a class="py2 px1 grey h5" @click="changeList(4)" :class="type == 4 ? ['tab-active'] : ''">
+        成团失败<sup class="count-tag" v-show="counts.fail > 0">{{ counts.fail }}</sup></a>
+    </div>
+
+    <refresh-loading :method="refresh" ref="top">
+
+      <div class="mt2 mx1 bg-white h5 order-card" v-for="item in tuans.list">
+        <div class="col-12 flex items-center justify-between white h6">
+          <div class="col-8 flex items-center justify-start">
+            <div class="tag bg-red" v-show="item.master == 1">发起</div>
+            <div class="tag bg-green" v-show="item.master == 0">参加</div>
+          </div>
+          <div class="col-4 flex items-center justify-end">
+            <div class="tag bg-orange" v-show="item.type == 1">待开团</div>
+            <div class="tag bg-orange" v-show="item.type == 2">待成团</div>
+            <div class="tag bg-orange" v-show="item.type == 3">已成团</div>
+            <div class="tag bg-orange" v-show="item.type == 4">成团失败</div>
+          </div>
+        </div>
+        <div class="col-12 flex items-center justify-start px2">
+          <div class="col-3 pr1">
+            <router-link :to="{ path: '/goods', query: { id: item.project_id } }">
+              <img class="circle" :src="item.img" style="width: 100%">
+            </router-link>
+          </div>
+          <div class="col-9">
+            <div class="col-12 pb1 dark bold">{{ item.name }}</div>
+            <div class="col-12 orange pb1" v-show="item.recommendation > 0 && item.project_type == 3">
+              <i class="icon-thumbs-o-up"></i> 试吃推荐度{{ item.recommendation }}%
+            </div>
+            <div class="col-12 green pb1" v-show="item.detec != '' && item.project_type == 1">
+              <i class="icon-microscope"></i>{{ item.detec }}
+            </div>
+          </div>
+        </div>
+        <router-link :to="{ path: '/tuan', query: { id: item.tid } }">
+          <div class="col-12 flex flex-wrap content-start grey px2 pb1">
+            <div class="col-12 flex items-start justify-end border-top">
+              <i class="icon-chevron-circle-right relative orange h2" style="top: -.8rem;margin-bottom: -1rem;"></i>
+            </div>
+            <div class="col-12 flex items-start justify-start">
+              <div class="col-3">收货人：</div>
+              <div class="col-9">{{ item.consignee }}</div>
+            </div>
+            <div class="col-12 flex items-start justify-start">
+              <div class="col-3">实付款：</div>
+              <div class="col-9"><span class="orange">￥{{ item.amount }}</span>（共{{ item.num }}件）</div>
+            </div>
+            <div class="col-12 flex items-start justify-start">
+              <div class="col-3">预定时间：</div>
+              <div class="col-9">{{ item.created_at }}</div>
+            </div>
+            <div class="col-12 flex items-start justify-start" v-show="item.delivery_at !== '1970年01月01日' && item.delivery_at !== ''">
+              <div class="col-3 h5">预计发货：</div>
+              <div class="col-9">{{ item.delivery_at }}</div>
+            </div>
+            <div class="col-12 flex items-start justify-start" v-show="item.shipping_at !== '1970年01月01日'">
+              <div class="col-3">发货时间：</div>
+              <div class="col-9">{{ item.shipping_at }}</div>
+            </div>
+            <div class="col-12 flex items-start justify-start" v-show="item.receive_at !== '1970-01-01 08:00'">
+              <div class="col-3">收货时间：</div>
+              <div class="col-9">{{ item.receive_at }}</div>
+            </div>
+            <div class="col-12 flex items-start justify-start" v-show="item.tuans !== false">
+              <div class="col-3">参团{{ item.ptype }}数：</div>
+              <div class="col-9">{{ item.persons }}{{ item.ptype }}已参团（{{ item.joiners }}{{ item.ptype }}成团）</div>
+            </div>
+          </div>
+        </router-link>
+        <div class="col-12 px2" v-show="item.type > 2">
+          <div class="col-12 flex items-center justify-end border-top py1">
+            <div class="col-4 px1" v-show="item.type == 3 || item.type">
+              <router-link class="btn btn-orange"
+                           :to="{ path: '/tuan/go', query: {
+                           goods_id: item.gid,
+                           stage_id: item.sid,
+                           project_id: item.pid
+                           } }">再开一团</router-link>
+            </div>
+            <div class="col-4 px1" v-show="item.type == 2">
+              <router-link class="btn btn-orange btn-outline" :to="{ path: '/tuan', query: { id: item.tid } }">去看看</router-link>
+            </div>
+            <div class="col-4 px1" v-show="item.type == 1">
+              <a class="btn btn-orange" :href="item.review_link">去付款</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <infinite-loading :on-infinite="onInfinite">
+        <div class="col-12 center silver p2">
+          <i class="icon-spinner spinning" v-show="tuans.more"></i>
+          <a class="btn more" v-show="!tuans.more">没有更多了</a>
+        </div>
+      </infinite-loading>
+
+    </refresh-loading>
+  </div>
+</layout>

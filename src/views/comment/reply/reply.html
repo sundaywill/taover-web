@@ -1,0 +1,37 @@
+<layout>
+  <b slot="center" class="p2 grey">我要掺和</b>
+  <div class="clearfix bg-white p2">
+    <div class="col col-12">
+      <textarea class="col col-12 h4 p1 border rounded" rows="5" title="" v-model="content"></textarea>
+    </div>
+    <div class="col col-12 py1 flex items-center justify-between">
+      <div v-if="pid > 0">
+        <a class="btn mx1" :class="showEmojis ? 'orange' : 'grey'" v-show="!iswx"
+           @click="showEmojis = !showEmojis"><i class="icon-smile-circle"></i></a>
+      </div>
+      <div v-else>
+        <a class="btn mx1" :class="showEmojis ? 'orange' : 'grey'" v-show="!iswx"
+           @click="showEmojis = !showEmojis"><i class="icon-smile-circle"></i></a>
+        <a class="btn grey mx1" :class="uploading ? 'orange' : 'grey'"
+           @click="uploadWx" v-if="iswx"><i class="icon-picture-circle"></i></a>
+        <a class="btn grey mx1" :class="uploading ? 'orange' : 'grey'"
+           onclick="uploader.click()" v-else><i class="icon-picture-circle"></i></a>
+        <input class="hide" type="file" accept="image/*" multiple id="uploader" ref="uploader" @change="upload">
+      </div>
+      <div><a class="btn btn-primary grey" @click="reply">回复</a></div>
+    </div>
+    <transition name="fade" mode="out-in">
+      <div class="col col-12 px2 center" v-show="showEmojis">
+        <div class="border center rounded emojis">
+          <a class="btn emoji" @click="typeEmoji(e)" v-for="e in emojis">{{ e }}</a>
+        </div>
+      </div>
+    </transition>
+    <div class="col col-12 px1 center flex justify-start" transition="fade" v-show="imgs.length > 0">
+      <div class="col-4 p1" transition="fade" v-for="(img, index) in locals">
+        <div class="bg-img" v-lazy-bg="img"></div>
+        <a class="btn remove" @click="deleteImg(index)"><i class="icon-times-circle"></i></a>
+      </div>
+    </div>
+  </div>
+</layout>

@@ -1,0 +1,35 @@
+.btn {
+  border-radius: .5rem;
+  padding: .5rem 0;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+.btn-orange {
+  border: 2px solid #ff8a00;
+  background: #ff8a00;
+  color: #fff;
+}
+.btn-outline.btn-orange {
+  border: 2px solid #ff8a00;
+  background: #fff;
+  color: #ff8a00;
+}
+.btn-outline.btn-orange:hover {
+  background: #ff8a00;
+  color: #fff;
+}
+.btn-toggle {
+  width: 5rem;
+  padding: .3rem;
+}
+.border2 {
+  border-width: 1rem;
+}
+.step {
+  padding: .15rem;
+  border-radius: 2rem;
+  margin-top: .85rem;
+  background: #ff8a00;
+  width: 100%
+}

@@ -1,0 +1,41 @@
+.tab-active {
+  border-bottom: 1px solid #ff8a00;
+  background: #ddd;
+}
+.tag {
+  padding: .1rem .5rem;
+}
+.btn.btn-orange, .btn.btn-orange.btn-outline:hover {
+  background: #ff8a00;
+  color: #fff;
+  border: 2px solid #ff8a00;
+  border-radius: .5rem;
+  text-align: center;
+  width: 100%;
+  padding: .4rem 0;
+}
+.btn.btn-orange.btn-outline {
+  background: #fff;
+  color: #ff8a00;
+  border: 2px solid #ff8a00;
+  border-radius: .5rem;
+  text-align: center;
+  width: 100%;
+  padding: .4rem 0;
+}
+.order-card {
+  box-shadow: 0 0 5px 0 #ddd;
+}
+.order-card:hover {
+  background: #fcfcfc;
+}
+.count-tag {
+  background: red;
+  color: white;
+  border-radius: 1rem;
+  padding: 0 .3rem;
+  position: relative;
+  float: right;
+  top: -2rem;
+  margin-bottom: -1.5rem;
+}

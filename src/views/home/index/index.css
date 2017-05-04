@@ -1,0 +1,54 @@
+.mint-swipe, .mint-swipe .response-img {
+  height: 150px!important;
+}
+.mint-swipe .response-img {
+  background: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+}
+.tabs img {
+  width: 3rem;
+}
+.bg-img {
+  background: transparent;
+  background-repeat: no-repeat;
+  background-size: auto 100%;
+  background-position: center;
+}
+.label span {
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  color: #fff;
+  font-weight: 400;
+  min-width: 2rem;
+  padding: .1rem .5rem .1rem .5rem;
+  margin-bottom: .2rem;
+  float: right;
+}
+.banners {
+  height: 100%;
+  width: 100%;
+  vertical-align: middle;
+}
+.know-left {
+  border-bottom-right-radius: 3rem;
+  border-top-right-radius: 3rem;
+  color: #fff;
+  background: #ffb853;
+}
+.more-right {
+  border-bottom-left-radius: 3rem;
+  border-top-left-radius: 3rem;
+  color: #fff;
+  background: #ff8c46;
+}
+.pb02 {
+  padding-bottom: .2rem;
+}
+.sweet-alert {
+  border-radius: 1.5rem!important;
+}
+.sweet-alert .sa-icon.sa-custom {
+  border-radius: 50%!important;
+}

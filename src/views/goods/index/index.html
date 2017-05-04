@@ -1,0 +1,257 @@
+<layout>
+  <div class="clearfix grey bg-silver overflow-hidden">
+
+    <div class="col col-12 bg-white center" id="project">
+      <img :src="project.img + '@90q'" style="width: 100%;vertical-align: bottom">
+      <div class="flex items-center justify-around col-12 border-box" style="background: #f8f8f8">
+        <router-link class="py2 grey col-4 center" :to="{ path: '/goods/sold', query: { id: project.id } }">
+          <i class="icon-sold"></i> 已售 {{ project.sold }}
+        </router-link>
+        <router-link class="py2 grey col-4 center" :to="{ path: '/comment', query: { id: project.id } }">
+          <i class="icon-commenting"></i> 掺和 {{ project.comments }}
+        </router-link>
+        <router-link class="py2 grey col-4 center" :to="{ path: 'vote/vote', query: { pid: project.id } }">
+          <i class="icon-vote"></i> 投票 {{ project.votes }}
+        </router-link>
+      </div>
+      <div class="py1">
+        <div class="center h3 bold pt1 dark">{{ project.name }}</div>
+        <router-link class="btn" v-show="project.maishou != ''"
+                     :to="{ path: '/maishou', query: { id: project.maishou_id } }">
+          <span class="orange">买手：{{ project.maishou }}</span>
+        </router-link>
+      </div>
+      <div class="clearfix dark desc px2 pb2" v-html="project.desc"></div>
+      <div class="flex items-center justify-start p2 border-top border-bottom" v-if="project.detec != ''">
+        <div class="border-box col-3"><img src="http://m.taover.com/themes/default/images/detection_165x140.png" style="width: 5rem"></div>
+        <div class="flex flex-wrap content-center border-box center col-8">
+          <span class="orange bold col-12 border-box h3 pb1 bold">{{ project.detec }}</span>
+          <router-link class="btn btn-orange col-12 border-box"
+                       :to="{ path: '/article', query: { id: project.detec_link, pid: project.id } }"
+                       v-if="project.detec_link != '' && project.id != 24">
+            <i class="icon-search"></i> <span>查看检测详情</span></router-link>
+          <router-link class="btn btn-orange col-12 border-box" v-if="project.id == 24"
+                       :to="{ path: '/detection', query: { id: project.detec_id } }">
+            <i class="icon-search"></i> <span>查看检测详情</span></router-link>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-12 px1 pt2" id="votes">
+      <div class="col col-12 bg-white">
+        <div class="flex items-center justify-center col-12 border-bottom p1">
+          <a class="col-6 center py1 orange" v-if="voteCurrent">
+            <div class="col-12 center border-box border-right">当前投票（{{ project.votes }}人）</div>
+          </a>
+          <a class="col-6 center py1 silver" @click="voteCurrent = true" v-else>
+            <div class="col-12 center border-box border-right">当前投票（{{ project.votes }}人）</div>
+          </a>
+          <a class="col-6 center py1 orange" v-if="!voteCurrent">
+            <div class="col-12 center border-box">以往投票（{{ project.relevant }}人）</div>
+          </a>
+          <a class="col-6 center py1 silver" @click="voteCurrent = false" v-else>
+            <div class="col-12 center border-box">以往投票（{{ project.relevant }}人）</div>
+          </a>
+        </div>
+        <div class="grey col-12 overflow-hidden" style="height: 7.5rem">
+          <div class="flex items-center justify-around border-box col-12 p1" v-show="voteCurrent">
+            <div class="center px1 py3" v-if="votes.current == false">暂无当前投票</div>
+            <div class="center p1" v-for="item in votes.current" v-else>
+              <u-circle color="#a4d424" width="60" bold="6" :pv="item.value" :label="item.label"></u-circle>
+              <div class="pt1">{{ item.name }}</div>
+            </div>
+          </div>
+          <div class="flex items-center justify-around border-box col-12 p1" v-show="!voteCurrent">
+            <div class="center px1 py3" v-if="votes.relevant == false">暂无以往投票</div>
+            <div class="center p1" v-for="item in votes.relevant" v-else>
+              <u-circle color="#a4d424" width="60" bold="6" :pv="item.value" :label="item.label"></u-circle>
+              <div class="pt1">{{ item.name }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-12 px2 pb2 border-box">
+          <router-link class="col-12 center btn btn-orange"
+                       :to="{ path: 'vote/vote', query: { pid: project.id } }">
+            看看买过的人怎么说</router-link>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-12 px1 pt2" id="progress">
+      <div class="bg-white col-12">
+        <div class="flex flex-wrap content-start border-box col-12 p2 grey" v-if="progress == false">暂无过程</div>
+        <div class="flex flex-wrap content-start border-box col-12 p2" v-else="">
+          <div class="flex items-center justify-between col-12" v-for="item in progress">
+            <div class="col-3" :class="item.current == 1 ? 'green' : 'grey'">
+              <i class="icon-search"></i> {{ item.label }}
+              <span class="h5" v-if="item.type != 4 && item.title != null">{{ item.start_at }}</span>
+            </div>
+            <div class="col-1 border-right flex items-center justify-end mr2 py2">
+              <i class="icon-circle dot" :class="item.current == 1 ? 'green' : 'gray'"></i>
+            </div>
+            <div class="col-8 p1">
+              <router-link :class="item.current == 1 ? 'green' : 'grey'"
+                           v-if="item.type != 4 && item.title != null"
+                           :to="{ path: '/article', query: { id: item.id, pid: project.id } }">
+                {{ item.title }}</router-link>
+              <div :class="item.current == 1 ? 'green' : 'grey'" v-else>{{ item.start_at }}-{{ item.end_at }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-center border-box col-12 px2 pb2 border-box">
+          <router-link class="col-12 center btn btn-orange"
+                       :to="{ path: '/goods/progress', query: { id: project.id } }">
+            查看所有过程（{{ project.progress }}个）</router-link>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-12 px1 pt2 border-box" v-if="goods == false">
+      <div class="col-12 p2 border-box bg-white center">
+        <p>当前没有商品在售卖...</p>
+        <p>不要着急哦，农人正在努力让农产品长熟。</p>
+        <p>很快就来了！</p></div>
+    </div>
+    <div class="col col-12 clearfix" id="goods" v-else="">
+      <div class="col col-12 px1 pt2" v-for="item in goods">
+        <div class="col col-12 bg-white grey">
+          <div class="col col-12 border-box">
+            <div class="p2 border-box bold">
+              <span class="grey">{{ item.name }}</span>
+              <!--<span class="orange">（已售{{ item.sold }}份）</span>-->
+            </div>
+          </div>
+          <div class="col col-12 border-box border-top">
+            <div class="col-12"><img :src="item.img" style="width: 100%"></div>
+            <div class="col-12 px2 pt1 dark" v-html="item.desc"></div>
+            <div class="flex items-center justify-around border-box col-12 p1" v-if="item.type == 1">
+              <div class="col-10 p1">
+                <a class="col-12 btn p0 center" :href="item.link">
+                  <div class="center white">
+                    <div class="rounded-top py2 bg-orange h3">
+                      <span>￥</span><span class="h1">{{ item.shop_price[0] }}</span><span>.{{ item.shop_price[1] }}</span>
+                    </div>
+                    <div class="rounded-bottom py1 bg-orange-light">购买</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="flex items-center justify-around border-box col-12 p1" v-if="item.type == 2">
+              <div class="col-6 p1">
+                <router-link class="col-12 btn p0 center"
+                             :to="{ path: '/tuan/go', query: { goods_id: item.goods_id, stage_id: item.stage_id, project_id: item.project_id } }">
+                  <div class="center white" v-if="item.ptype == 1">
+                    <div class="rounded-top py2 bg-red h3">
+                      <span>￥</span><span class="h1">{{ item.price[0] }}</span><span>.{{ item.price[1] }}</span>
+                    </div>
+                    <div class="rounded-bottom py1 bg-red7">{{ item.num + '人成团' }}</div>
+                  </div>
+                  <div class="center white" v-else>
+                    <div class="rounded-top py2 bg-green8 h3">
+                      <span>￥</span><span class="h1">{{ item.price[0] }}</span><span>.{{ item.price[1] }}</span>
+                    </div>
+                    <div class="rounded-bottom py1 bg-green">{{ item.num + '份同地址拼团' }}</div>
+                  </div>
+                </router-link>
+              </div>
+              <div class="col-6 p1">
+                <a class="col-12 btn p0 center" :href="item.link">
+                  <div class="center white">
+                    <div class="rounded-top py2 bg-orange h3">
+                      <span>￥</span><span class="h1">{{ item.shop_price[0] }}</span><span>.{{ item.shop_price[1] }}</span>
+                    </div>
+                    <div class="rounded-bottom py1 bg-orange-light">单独购买</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="flex items-center justify-around border-box col-12 p1" v-if="item.type == 3">
+              <div class="p1 flex flex-wrap content-stretch">
+                <a class="col-6 btn p0 center" :href="item.link">
+                  <div class="center white">
+                    <div class="rounded-top py2 bg-orange h3">
+                      <span>￥</span><span class="h1">{{ item.shop_price[0] }}</span><span>.{{ item.shop_price[1] }}</span>
+                    </div>
+                    <div class="rounded-bottom py1 bg-orange-light">购买</div>
+                  </div>
+                </a>
+
+                <div class="col-6 flex flex-wrap content-stretch px1">
+                  <div class="col-1 border border-orange border-rounded bg-orange">
+                    <div class="bg-white percent" :style="{ height: (100 - item.percent) + '%' }"></div>
+                  </div>
+                  <div class="col-11 flex flex-wrap content-between orange pl1">
+                    <div class="col-12">共 {{ item.count }} 份</div>
+                    <div class="col-12">{{ item.percent + '%' }}</div>
+                    <div class="col-12">已售 {{ item.sold }} 份</div>
+                  </div>
+                </div>
+                <!--<div class="flex items-stretch justify-around col-5">
+                  <div class="border mx1 flex items-end progress">
+                    <div class="bg-orange" :style="{ height: item.percent + '%' }"></div>
+                  </div>
+                  <div class="flex flex-wrap content-between orange" style="height: 100%;min-height: 5.5rem">
+                    <div class="col-12">共 {{ item.count }} 份</div>
+                    <div class="col-12">{{ item.percent + '%' }}</div>
+                    <div class="col-12">已售 {{ item.sold }} 份</div>
+                  </div>
+                </div>-->
+              </div>
+            </div>
+            <div class="flex items-center justify-around border-box col-12 p1" v-if="item.type == 4">
+              <div class="col-10 p1">
+                <a class="col-12 btn p0" style="text-align: right">
+                  <div class="center white" style="margin-bottom: -5.5rem">
+                    <div class="rounded-top py2 h3" style="background: #cdcdcd">
+                      <span>￥</span><span class="h1">{{ item.shop_price[0] }}</span><span>.{{ item.shop_price[1] }}</span>
+                    </div>
+                    <div class="rounded-bottom py1" style="background: #dcdcdc">购买</div>
+                  </div>
+                  <i class="icon-sell-out-small z1 relative orange" style="font-size: 5.5rem"></i>
+                </a>
+              </div>
+            </div>
+            <div class="flex items-center justify-around border-box col-12 p1" v-if="item.type == 5">
+              <div class="col-10 p1">
+                <a class="col-12 btn p0 center">
+                  <div class="center white" style="margin-bottom: -5.5rem">
+                    <div class="rounded-top py2 bg-orange h3" style="background: #cdcdcd">
+                      <span>￥</span><span class="h1">{{ item.shop_price[0] }}</span><span>.{{ item.shop_price[1] }}</span>
+                    </div>
+                    <div class="rounded-bottom py1 bg-orange-light" style="background: #dcdcdc">购买</div>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-12 px1 py2" id="comments">
+      <div class="col col-12 bg-white">
+        <div class="dark col-12 border-box" v-if="comments != false">
+          <div class="flex flex-wrap content-start border-box col-12 px2">
+            <div class="border-bottom py2 flex justify-between col-12" v-for="item in comments">
+              <div class="col-2"><img class="circle" :src="item.avatar" style="width: 3rem"></div>
+              <div class="col-10">
+                <div class="py1"><div>{{ item.nick }}</div><div class="h5" style="color: #aaa">{{ item.time }}</div></div>
+                <div class="col-12" v-html="item.content"></div>
+                <div class="col-12 flex flex-wrap items-center content-center pt1" v-if="item.imgs != ''">
+                  <div class="pr1 pb1 bg-img" v-lazy-bg="img" v-for="img in item.images"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col col-12 p2 border-box">
+          <router-link class="col-12 center btn btn-orange"
+                       :to="{ path: '/comment', query: { id: project.id } }">
+            我要掺和（{{ project.comments }}条）</router-link>
+        </div>
+      </div>
+    </div>
+
+    <foot></foot>
+  </div>
+</layout>

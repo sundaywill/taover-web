@@ -1,0 +1,26 @@
+.tab-bar {
+  border-radius: 2rem;
+}
+.orange1 {
+  color: #ff9915;
+}
+.lime1 {
+  color: #89bc0f;
+}
+.green1 {
+  color: #42ad3c;
+}
+.bg-orange1 {
+  background: #ff9915;
+}
+.bg-lime1 {
+  background: #89bc0f;
+}
+.bg-green1 {
+  background: #42ad3c;
+}
+.btn-detecs2 {
+  background: #FF9915;
+  border-radius: 3rem;
+  box-shadow: 0 1px 0 1px #ed6c00;
+}

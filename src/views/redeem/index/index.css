@@ -1,0 +1,11 @@
+.input {
+  margin-bottom: 0;
+  line-height: 1rem;
+  height: auto;
+}
+.btn-primary {
+  background: #ff8a00;
+}
+.bg-light {
+  background: #eee;
+}

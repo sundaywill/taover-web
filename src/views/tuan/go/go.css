@@ -1,0 +1,19 @@
+.title {
+  margin-top: -3.8rem;margin-bottom: 0;
+  color: #333;
+}
+.fs-13 {
+  font-size: 1.3rem;
+}
+.tips {
+  border-radius: 2rem;
+  background: #ffe7b3;
+}
+.btn-primary {
+  border-radius: .5rem;
+  padding: 1rem;
+  background: #f45e05;
+}
+.sweet-alert.showSweetAlert > h2 {
+  margin: 1rem 0;
+}

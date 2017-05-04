@@ -1,0 +1,28 @@
+<div class="col col-12 flex justify-center bg-silver">
+  <div class="col-12 sm-col-9 md-col-6 lg-col-5">
+    <div class="col-12 flex items-center justify-between relative z1 bg-white nav">
+      <slot name="left">
+        <a class="p2 grey" href="javascript:history.back()">
+          <i class="icon-chevron-left"></i>
+        </a>
+      </slot>
+      <slot name="center">
+        <a class="p2">
+          <img src="http://ty-image-01.oss-cn-qingdao.aliyuncs.com/logo-nav.png">
+        </a>
+      </slot>
+      <slot name="right">
+        <a class="p1 orange" href="javascript:window.router.replace('/')">
+          <i class="icon-home-circle"></i>
+        </a>
+      </slot>
+    </div>
+    <slot></slot>
+
+    <transition name="fade" mode="out-in">
+      <a class="fixed bottom-0 right-0 p2 z3" v-if="showGoTop" @click="goTop">
+        <i class="icon-rocket circle red" style="font-size: 3rem"></i>
+      </a>
+    </transition>
+  </div>
+</div>

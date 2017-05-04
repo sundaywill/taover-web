@@ -1,0 +1,152 @@
+<layout>
+  <b slot="center" class="p2 grey">我的订单</b>
+  <div class="clearfix bg-silver grey">
+
+    <div class="col-12 flex items-center justify-around border-bottom bg-white relative z1">
+      <a class="grey h5 py2 px1" @click="changeList(0)" :class="type == 0 ? 'tab-active' : ''">所有</a>
+      <a class="grey h5 py2 px1" @click="changeList(1)" :class="type == 1 ? 'tab-active' : ''">
+        <div>待付款</div><sup class="count-tag" v-show="counts.unpaid > 0">{{ counts.unpaid }}</sup></a>
+      <a class="grey h5 py2 px1" @click="changeList(2)" :class="type == 2 ? 'tab-active' : ''">
+        <div>待发货</div><sup class="count-tag" v-show="counts.unshipping > 0">{{ counts.unshipping }}</sup></a>
+      <a class="grey h5 py2 px1" @click="changeList(3)" :class="type == 3 ? 'tab-active' : ''">
+        <div>待收货</div><sup class="count-tag" v-show="counts.unreceive > 0">{{ counts.unreceive }}</sup></a>
+      <a class="grey h5 py2 px1" @click="changeList(4)" :class="type == 4 ? 'tab-active' : ''">
+        <div>待投票</div><sup class="count-tag" v-show="counts.unvote > 0">{{ counts.unvote }}</sup></a>
+      <a class="grey h5 py2 px1" @click="changeList(5)" :class="type == 5 ? 'tab-active' : ''">
+        <div>售后</div><sup class="count-tag" v-show="counts.refund > 0">{{ counts.refund }}</sup></a>
+    </div>
+
+    <refresh-loading :method="refresh" ref="top">
+
+        <div class="mt2 mx1 bg-white grey h5 order-card" v-for="item in orders.list">
+          <div class="col-12 flex items-center justify-between white h6">
+            <div class="col-8 flex items-center justify-start">
+              <div class="tag bg-red" v-show="item.cycles !== false">分期送</div>
+              <div class="tag bg-green" v-show="item.tuans !== false">团购</div>
+              <div class="tag bg-orange" v-show="item.gift > 0">礼品</div>
+            </div>
+            <div class="col-4 flex items-center justify-end">
+              <div class="tag bg-orange" v-show="item.type == 1">待付款</div>
+              <div class="tag bg-orange" v-show="item.type == 2">待发货</div>
+              <div class="tag bg-orange" v-show="item.type == 3">待收货</div>
+              <div class="tag bg-orange" v-show="item.type == 4">待投票</div>
+              <div class="tag bg-orange" v-show="item.type == 5 && item.refund_status == 1">申请退款中</div>
+              <div class="tag bg-orange" v-show="item.type == 5 && item.refund_status == 2">已退款</div>
+              <div class="tag bg-orange" v-show="item.type == 5 && item.refund_status == 3">已受理</div>
+              <div class="tag bg-orange" v-show="item.type == 6">已投票</div>
+            </div>
+          </div>
+          <div class="col-12 flex items-center justify-start px2">
+            <div class="col-3 pr1">
+              <router-link :to="{ path: '/goods', query: { id: item.pid } }">
+                <img class="circle" :src="item.img" style="width: 100%">
+              </router-link>
+            </div>
+            <div class="col-9">
+              <div class="col-12 pb1 dark bold">{{ item.name }}</div>
+              <div class="col-12 orange pb1" v-show="item.recommendation > 0 && item.project_type == 3">
+                <i class="icon-thumbs-o-up"></i> 试吃推荐度{{ item.recommendation }}%
+              </div>
+              <div class="col-12 green pb1" v-show="item.detec != '' && item.project_type == 1">
+                <i class="icon-microscope"></i>{{ item.detec }}
+              </div>
+            </div>
+          </div>
+          <router-link :to="{ path: '/order/index', query: { sn: item.sn } }">
+            <div class="col-12 flex flex-wrap content-start grey px2 pb1">
+              <div class="col-12 flex items-start justify-end border-top">
+                <i class="icon-chevron-circle-right relative orange h2" style="top: -.8rem;margin-bottom: -1rem;"></i>
+              </div>
+              <div class="col-12 flex items-start justify-start">
+                <div class="col-3">收货人：</div>
+                <div class="col-9">{{ item.consignee }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start">
+                <div class="col-3">实付款：</div>
+                <div class="col-9"><span class="orange">￥{{ item.amount }}</span>（共{{ item.num }}件）</div>
+              </div>
+              <div class="col-12 flex items-start justify-start">
+                <div class="col-3">预定时间：</div>
+                <div class="col-9">{{ item.created_at }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 1 || item.type == 2">
+                <div class="col-4 h5">预计发货时间：</div>
+                <div class="col-8">{{ item.delivery_at }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 3 || item.type == 4">
+                <div class="col-3">发货时间：</div>
+                <div class="col-9">{{ item.shipping_at }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 4 || item.type == 6">
+                <div class="col-3">收货时间：</div>
+                <div class="col-9">{{ item.receive_at }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.tuans !== false">
+                <div class="col-3">参团{{ item.tuans.type }}数：</div>
+                <div class="col-9">{{ item.tuans.persons }}{{ item.tuans.type }}已参团（{{ item.tuans.joiners }}{{ item.tuans.type }}成团）</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 5 && item.refund_status > 0">
+                <div class="col-4 h5">申请退款时间：</div>
+                <div class="col-8">{{ item.apply_at }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 5 && item.refund_status == 2">
+                <div class="col-3">退款时间：</div>
+                <div class="col-9">{{ item.refund_at }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 5 && item.refund_status > 1">
+                <div class="col-3">退款路径：</div>
+                <div class="col-9">{{ item.refund_to }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start border-top mt1 pt1" v-show="item.type == 3 && item.express != ''">
+                <div class="col-3">物流公司：</div>
+                <div class="col-9">{{ item.shipping }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 3 && item.invoice_no != ''">
+                <div class="col-3">物流单号：</div>
+                <div class="col-9">{{ item.invoice_no }}</div>
+              </div>
+              <div class="col-12 flex items-start justify-start" v-show="item.type == 3 && item.logistic">
+                <div class="col-3">物流信息：</div>
+                <div class="col-9">
+                  <div style="color: #006633">{{ item.logistic.context }}</div>
+                  <div class="h6 silver">{{ item.logistic.time }}</div>
+                </div>
+              </div>
+            </div>
+          </router-link>
+          <div class="col-12 px2" v-show="item.type > 2">
+            <div class="col-12 flex items-center justify-end border-top py1">
+              <div class="col-4 px1" v-show="item.type == 5 || item.type == 7">
+                <a class="btn btn-orange btn-outline" @click="call">客服电话</a>
+              </div>
+              <div class="col-4 px1" v-show="item.type == 5 || item.type == 6 || item.type == 7">
+                <a class="btn btn-orange" :href="item.pay_link">再次预定</a>
+              </div>
+              <div class="col-4 px1" v-show="item.type == 4">
+                <router-link class="btn btn-orange" :to="{ path: '/vote/vote', query: { pid: item.pid, id: item.id, votego: 1 } }">
+                  <span v-if="item.project_type == 3">口感评估返利</span><span v-else>投票&评论</span>
+                </router-link>
+              </div>
+              <div class="col-4 px1" v-show="item.type == 3">
+                <router-link class="btn btn-orange btn-outline" :to="{ path: '/order/index', query: { sn: item.sn }, hash: 'logistics' }">查看物流</router-link>
+              </div>
+              <div class="col-4 px1" v-show="item.type == 3">
+                <a class="btn btn-orange" @click="receive(item.sn, item.id, item.pid)">确认收货</a>
+              </div>
+              <div class="col-4 px1" v-show="item.type == 1">
+                <a class="btn btn-orange" :href="item.review_link">去付款</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <infinite-loading :on-infinite="onInfinite">
+        <div class="col-12 center silver p2">
+          <i class="icon-spinner spinning" v-show="orders.more"></i>
+          <a class="btn more" v-show="!orders.more">没有更多了</a>
+        </div>
+      </infinite-loading>
+
+    </refresh-loading>
+  </div>
+</layout>

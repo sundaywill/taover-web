@@ -1,0 +1,37 @@
+<layout>
+  <b slot="center" class="p2 grey">邀请新人</b>
+  <div class="clearfix">
+    <div class="flex flex-wrap content-center" style="background: #FFF9B5">
+      <div class="col-12">
+        <img :src="image1" width="100%">
+      </div>
+      <div class="col-12 px4 center invite-tip">
+        <div class="px2">{{ label1 }}</div>
+      </div>
+      <div class="col-12 px4 py3 center">
+        <a class="btn btn-primary invite-btn" @click="showShare">{{ button1 }}</a>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap content-center" style="background: #fcdc6f">
+      <div class="col-12 center p3">
+        <div class="border-top invite-reb mx3">
+          <img src="http://ty-image-01.img-cn-qingdao.aliyuncs.com/images/wodeyaoqing.png@50q.png">
+        </div>
+        <div class="col-12 center">
+          <div class="flex justify-between items-center mb2" v-for="item in list">
+            <div class="flex justify-start items-center">
+              <img class="circle" v-lazy="item.avatar" style="width: 3rem">
+              <span class="pl2 brown">{{ item.nick }}</span>
+            </div>
+            <span class="brown">{{ item.time }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <foot></foot>
+
+    <share ref="share"></share>
+  </div>
+</layout>

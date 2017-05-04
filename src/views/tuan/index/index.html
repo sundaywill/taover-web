@@ -1,0 +1,125 @@
+<layout>
+  <b slot="center" class="p2 grey">我要参团</b>
+  <div class="clearfix">
+    <div class="clearfix dark bg-white">
+      <div class="flex flex-wrap content-center" v-if="tuan.sell_out">
+        <div class="col-12 center">
+          <img class="width-full" :src="tuan.img" style="opacity: .3">
+          <div class="p2 bg-lighten-4 relative bold fs-13 title grey">{{ tuan.name }}</div>
+        </div>
+        <div class="col-12 center z1 sell-out"><i class="icon-sell-out"></i></div>
+      </div>
+      <div class="col col-12 center" v-else>
+        <img class="width-full" :src="tuan.img">
+        <div class="p2 bg-lighten-4 relative bold fs-13 title">{{ tuan.name }}</div>
+      </div>
+
+      <div class="flex items-center justify-between px2 py1">
+        <div class="flex items-center justify-start">
+          <img class="circle" :src="tuan.avatar" style="width: 3rem">
+          <div class="flex flex-wrap content-between px1">
+            <div class="col-12">发起人</div>
+            <div class="orange">{{ tuan.nick }}</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap content-between">
+          <div class="flex items-center justify-end col-12">
+            <div>
+              <span v-if="tuan.ptype == 1">拼邮价：</span><span v-else>团购价：</span>
+              <span class="orange">{{ tuan.price }}</span>元
+            </div>
+          </div>
+          <div class="flex items-center justify-end col-12">
+            <div class="line-through grey">原价：{{ tuan.origin_price }}元</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border pt1 bg-silver col col-12"></div>
+
+      <div class="col col-12 p2 border-bottom">
+        <div class="flex items-center justify-between">
+          <div>
+            <span>报名截止:</span>
+            <span v-if="tuan.is_end && tuan.sell_out">已截止</span>
+            <span class="orange" v-else>{{ tuan.left }}</span>
+          </div>
+          <div class="bg-orange white p1 bold">{{ tuan.status_text }}</div>
+        </div>
+        <div class="flex items-center rounded border my1 process">
+          <div class="rounded bg-orange p1" v-bind:style="{ width: tuan.perc + '%' }" v-if="tuan.perc > 0"></div>
+          <div class="orange bold pl1" v-if="tuan.percent < 80">{{ tuan.percent }}%</div>
+          <div class="white bold" style="margin-left: -3rem" v-else>{{ tuan.percent }}%</div>
+        </div>
+        <div class="flex items-center justify-between">
+          <div>已参团<span class="orange">{{ tuan.persons }}</span>份 - {{ tuan.joiners }}份成团</div>
+          <a @click="jumpToMembers" v-if="tuan.members != undefined">
+            <div class="flex items-center justify-start">
+              <div v-for="(item, index) in tuan.members" v-if="index < 5">
+                <img class="circle ml1 w2" v-lazy="item.avatar" v-if="item.master == 0">
+                <img class="circle ml1 w2 master" v-lazy="item.avatar" v-else>
+              </div>
+              <i class="icon-ellipsis-h ml1" style="color: #aaa"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col col-12 p2">
+        <div class="red" v-if="tuan.ptype == 2">
+          <div>所有商品均配送至开团人地址：</div>
+          <div>{{ tuan.address }}</div>
+        </div>
+        <div class="grey" v-if="tuan.over">很遗憾，未成团，正在执行退款</div>
+        <div class="grey" v-else>发货预计：{{ tuan.delivery_at }}</div>
+        <div class="grey">如果报名截止时未成团，将自动退款</div>
+      </div>
+
+      <div class="col col-12 px2 pb2" v-if="tuan.btn != '已截止'">
+        <a class="btn btn-primary col-12 center fs-13" @click="join">{{ tuan.btn }}</a>
+        <a class="btn btn-primary col-12 center fs-13 btn-share" @click="showShare">召集小伙伴参加</a>
+      </div>
+      <div class="col col-12 px2 pb2" v-else>
+        <a class="btn btn-primary col-12 center fs-13 btn-disabled">{{ tuan.btn }}</a>
+      </div>
+
+      <div class="border pt1 bg-silver col col-12"></div>
+
+      <div class="col col-12 p2">
+        <div class="mb1 bold">商品详情</div>
+        <img class="width-full" :src="tuan.goods_img">
+        <div class="mb1" v-html="tuan.goods_desc"></div>
+        <router-link class="btn btn-primary btn-circle"
+                     :to="{ path: '/goods', query: { id: tuan.project_id }}">
+          <i class="icon-search"></i>查看她的成长故事
+        </router-link>
+      </div>
+
+      <div class="border pt1 bg-silver col col-12"></div>
+
+      <div class="col col-12 p2" id="members">
+        <div class="pb1 border-bottom bold">已参团</div>
+        <div class="flex items-center justify-between" v-for="item in tuan.members">
+          <div class="flex items-center justify-start">
+            <img class="circle" v-lazy="item.avatar" style="width: 3rem">
+            <div class="flex flex-wrap content-between px1">
+              <div class="col-12">{{ item.nick }}</div>
+              <div class="orange">{{ item.num }}份</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap content-between py2 grey">
+            <div class="flex items-center justify-end col-12">{{ item.time }}</div>
+            <div class="flex items-center justify-end col-12" v-if="item.master == 0">参团人</div>
+            <div class="flex items-center justify-end col-12" v-else>发起人</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <foot></foot>
+
+    <share ref="share"></share>
+  </div>
+</layout>
+

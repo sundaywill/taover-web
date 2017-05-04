@@ -1,0 +1,25 @@
+<layout>
+  <div class="clearfix bg-white">
+    <div class="bg-white px2">
+      <p class="center bold h2 py2 border-bottom" style="color:#ED6C00">{{ article.title }}</p>
+      <div class="py2 dark" v-html="article.content"></div>
+      <div class="flex justify-center flex-wrap" v-if="isArticle">
+        <router-link class="center block bg-orange white h3 py2 col-6 rounded" :to="{ path: 'goods', query: { id: pid } }">购买此产品</router-link>
+        <div class="col-12" v-if="article.link_project!=''">
+          <div class="bg-silver dark p2 mt2">
+            <p class="border-bottom h3 py1"><span>相关项目</span></p>
+            <ul class="list-reset h5">
+              <li v-for="item in article.projects">
+                <router-link class="dark" :to="{ path: 'goods', query: { id: item.id } }">{{ item.name }}</router-link>
+                <span class="right right-align">{{ item.count }}人<br />{{ item.time }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <foot></foot>
+  </div>
+</layout>
+
+

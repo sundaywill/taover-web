@@ -1,0 +1,39 @@
+<layout>
+  <b slot="center" class="p2 grey">注册</b>
+  <div class="clearfix flex justify-center items-center">
+    <div class="col-10 sm-col-9 md-col-8 lg-col-8">
+      <div class="clearfix mx-auto p2">
+        <div class="flex justify-center items-center my2">
+          <div class="col-4">
+            <img class="logo circle" v-lazy="avatar" v-if="avatar != ''">
+            <img class="logo circle" src="http://img01.taover.com/images/tylife-circle.png" v-else>
+          </div>
+        </div>
+        <div class="flex justify-center items-center my2">
+          <input type="tel" class="input center" placeholder="请输入手机" v-model="user.username">
+        </div>
+        <div class="flex justify-center items-center my2">
+          <input type="tel" class="input center" placeholder="验证码" v-model="user.smsCode">
+          <div class="code pl2" v-if="verifyPhone">
+            <a class="btn btn-primary center disabled" v-if="sending">稍等<b> {{ timer }} </b>秒</a>
+            <a class="btn btn-primary center" @click="sendSmsCode" v-else>获取验证码</a>
+          </div>
+          <div class="code pl2" v-else>
+            <a class="btn btn-primary center disabled">获取验证码</a>
+          </div>
+        </div>
+        <div class="flex justify-center items-center my2">
+          <input type="password" class="input center" placeholder="请设置一个安全的密码" v-model="user.password">
+        </div>
+        <div class="flex justify-center items-center my2">
+          <a class="btn btn-primary center login" @click="login" v-if="verified">注 册</a>
+          <a class="btn btn-primary center login disabled" v-else>注 册</a>
+        </div>
+        <div class="flex justify-between items-center my2">
+          <router-link class="btn center btn-outline forget" to="/forget">忘记密码</router-link>
+          <router-link class="btn center btn-outline register" to="/login">已有账号，去登录</router-link>
+        </div>
+      </div>
+    </div>
+  </div>
+</layout>

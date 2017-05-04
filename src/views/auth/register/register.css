@@ -1,0 +1,42 @@
+.input {
+  height: auto;
+  border-radius: 2rem;
+  margin: 0;
+  padding: 1rem;
+  color: #555;
+}
+.input:focus {
+  box-shadow: none;
+  outline: none;
+}
+.btn {
+  border-radius: 2rem;
+}
+.btn-primary {
+  padding: 1rem;
+  background: #ff8820;
+}
+.btn-outline {
+  padding: .3rem .6rem;
+}
+.code {
+  width: 80%;
+}
+.code .btn {
+  box-sizing: border-box;
+}
+.login, .logo, .code .btn {
+  width: 100%;
+}
+.register {
+  color: lightseagreen;
+}
+.forget {
+  color: coral;
+}
+.pwdmode {
+  color: #ff8a00;
+}
+.disabled {
+  background: #ccc;
+}

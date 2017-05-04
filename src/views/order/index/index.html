@@ -1,0 +1,219 @@
+<layout>
+  <b slot="center" class="p2 grey">订单详情</b>
+  <div class="clearfix bg-white dark">
+
+    <div class="col col-12">
+      <router-link class="col-12 flex items-center justify-center"
+                   :to="{ path: '/goods', query: { id: order.pid } }">
+        <img :src="order.image" style="width: 100%;vertical-align: bottom">
+      </router-link>
+      <div class="col-12 px2">
+        <div class="col-12 flex items-center justify-between py2">
+          <div class="bold" style="font-size: 1.1rem">{{ order.title }}</div>
+          <div class="orange"> × <span class="orange">{{ order.num }}</span> 件</div>
+        </div>
+        <div class="col-12 flex items-center justify-start py1 border-top" v-show="order.detection">
+          <img :src="detection.icon" style="width: 2rem">
+          <span class="orange pl1">{{ detection.detec }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-12 border-top border2 p1">
+      <div class="col-12 flex items-center justify-between p1">
+        <div>商品价格：</div>
+        <div>￥{{ order.price }}元</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1" v-show="order.integral > 0">
+        <div>使用积分：</div>
+        <div>-￥{{ order.integral }}元</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1" v-show="order.coupon > 0">
+        <div>优惠券：</div>
+        <div>-￥{{ order.coupon }}元</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1" v-show="order.balance > 0">
+        <div>余额抵扣：</div>
+        <div>-￥{{ order.balance }}元</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1">
+        <div>快递运费：</div>
+        <div>{{ order.postage }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1">
+        <div>实付款：</div>
+        <div class="orange">￥{{ order.amount }}元<span v-show="order.tid > 0">（成团价）</span></div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1"
+           v-show="order.refund_status == 1 || order.refund_status == 3">
+        <div>申请退款金额：</div>
+        <div class="orange">￥{{ order.refund_money }}元</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1"
+           v-show="order.refund_status == 2">
+        <div>实际已退金额：</div>
+        <div class="orange">￥{{ order.refund_amount }}元</div>
+      </div>
+      <div class="col-12 flex items-center justify-between p1"
+           v-show="order.refund_status == 2 || order.refund_status == 3">
+        <div>退回路径：</div>
+        <div>{{ order.refund_to }}</div>
+      </div>
+      <div class="col-12 flex items-start justify-center p1" v-show="order.refund_status > 0">
+        <div class="flex flex-wrap content-start items-start justify-center center"
+             :class="order.refund_status > 0 ? 'orange' : 'silver'" style="width: 23%">
+          <i class="h1" :class="order.refund_status > 0 ? 'icon-check-circle-o' : 'icon-circle-o'"></i>
+          <div class="h5">申请退款</div>
+          <div class="h5" v-show="order.refund_status > 0">{{ order.apply_at }}</div>
+        </div>
+        <div class="flex flex-wrap content-start items-start justify-center center" style="width: 15%">
+          <div class="step" :class="order.refund_status > 0 ? 'bg-orange' : 'bg-grey'"></div>
+        </div>
+        <div class="flex flex-wrap content-start items-start justify-center center"
+             :class="order.refund_status > 1 ? 'orange' : 'silver'" style="width: 23%">
+          <i class="h1" :class="order.refund_status > 1 ? 'icon-check-circle-o' : 'icon-circle-o'"></i>
+          <div class="h5">系统受理</div>
+          <div class="h5" v-show="order.refund_status > 1">{{ order.resolve_at }}</div>
+        </div>
+        <div class="flex flex-wrap content-start items-start justify-center center" style="width: 15%">
+          <div class="step" :class="order.refund_status > 1 ? 'bg-orange' : 'bg-grey'"></div>
+        </div>
+        <div class="flex flex-wrap content-start items-start justify-center center"
+             :class="order.refund_status == 2 ? 'orange' : 'silver'" style="width: 23%">
+          <i class="h1" :class="order.refund_status == 2 ? 'icon-check-circle-o' : 'icon-circle-o'"></i>
+          <div class="h5">完成退款</div>
+          <div class="h5" v-show="order.refund_status == 2">{{ order.refund_at }}</div>
+        </div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1" v-show="order.refund_status > 0">
+        <div class="grey h5" v-show="order.refund_status == 3">
+          正在退款中，请耐心等待。（如有疑问，可联系淘源客服）
+        </div>
+        <div class="grey h5" v-show="order.refund_status == 2">
+          已于{{ order.refund_at }}执行退款操作，到您账户中可能需要5个工作日，请耐心等待。（如有疑问，可联系淘源客服）
+        </div>
+      </div>
+    </div>
+    <div class="col-12 flex items-center justify-end border-top p1">
+      <div class="col-4 flex items-center justify-center p1" v-show="order.buy_again == 1 && order.buy_link != undefined">
+        <a class="btn btn-orange" :href="order.buy_link">再次预定</a>
+      </div>
+      <div class="col-4 flex items-center justify-center p1" v-show="order.refund_status > 0">
+        <a class="btn btn-outline btn-orange" @click="call">客服电话</a>
+      </div>
+      <div class="col-4 flex items-center justify-center p1" v-show="order.can_cancel == 1">
+        <a class="btn btn-orange" :href="order.review_link">取消预定</a>
+      </div>
+      <div class="col-4 flex items-center justify-center p1" v-show="order.can_cancel == 1">
+        <a class="btn btn-orange" :href="order.review_link">去付款</a>
+      </div>
+      <div class="col-4 flex items-center justify-center p1" v-show="order.cancel_refund == 1">
+        <a class="btn btn-orange" @click="cancelRefund">取消退款</a>
+      </div>
+      <div class="col-4 flex items-center justify-center p1" v-show="order.can_refund == 1">
+        <router-link class="btn btn-orange" :to="{ path: '/refund', query: { id: order.id } }">申请退款</router-link>
+      </div>
+      <div class="col-4 flex items-center justify-center p1" v-show="order.can_vote == 1">
+        <router-link class="btn btn-orange" :to="{ path: '/vote/vote', query: { pid: order.pid, id: order.id, votego: 1 } }">
+          <span v-if="order.shichi == 1">口感评估返利</span>
+          <span v-else>投票&评论</span>
+        </router-link>
+      </div>
+      <div class="col-4 flex items-center justify-center p1" v-show="order.confirm_receive == 1">
+        <a class="btn btn-orange" @click="receive">确认收货</a>
+      </div>
+    </div>
+
+    <div class="col col-12 border-top border2 p1">
+      <div class="col-12 flex items-center justify-start p1">
+        <div class="col-3">订单编号：</div>
+        <div class="col-9">{{ order.sn }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1">
+        <div class="col-3">收货人：</div>
+        <div class="col-9">{{ order.consignee }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1">
+        <div class="col-3">手机号码：</div>
+        <div class="col-9">{{ order.mobile }}</div>
+      </div>
+      <div class="col-12 flex items-start justify-start p1">
+        <div class="col-3">收货地址：</div>
+        <div class="col-9 flex items-center flex-wrap content-center">
+          <div class="col-12">
+            <span class="pr1" v-show="order.province != ''">{{ order.province }}</span>
+            <span class="pr1">{{ order.city }}</span>
+            <span>{{ order.district }}</span></div>
+          <div class="col-12">[{{ order.address_type }}] {{ order.address }}</div>
+        </div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1" v-if="order.memo != ''">
+        <div class="col-3">留言：</div>
+        <div class="col-9">{{ order.memo }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1"
+           v-show="order.delivery_at != '' && order.can_delivery == 1">
+        <div>预计发货时间：</div>
+        <div>{{ order.delivery_at }}</div>
+      </div>
+    </div>
+
+    <div class="col col-12 border-top border2 p1" id="logistics" v-if="order.confirm_receive == 1 || order.received == 1">
+      <div class="col-12 flex items-center justify-start p1"
+           v-show="order.shipping_at != '' && (order.confirm_receive == 1 || order.received == 1)">
+        <div class="col-3">发货时间：</div>
+        <div class="col-9">{{ order.shipping_at }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1"
+           v-show="order.receive_at != '' && order.received == 1">
+        <div class="col-3">收货时间：</div>
+        <div class="col-9">{{ order.receive_at }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1"
+           v-show="order.express != '' && order.refund_status == 0">
+        <div class="col-3">快递公司：</div>
+        <div class="col-9 flex items-center justify-between">{{ order.express }}
+          <a class="btn btn-orange btn-toggle" @click="showLogistics = !showLogistics"
+             v-show="(order.confirm_receive == 1 || order.received == 1) && order.logistics">
+            <span v-if="showLogistics">收起物流</span><span v-else>展开物流</span>
+          </a>
+        </div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1" v-show="order.logistics && showLogistics">
+        <div class="col-12 flex flex-wrap content-center items-center">
+          <div class="col-12 flex items-start justify-start" v-for="(item, index) in order.logistics">
+            <div class="col-2 flex items-start justify-end py1">
+              <div class="green h5 mr1" v-show="index == 0" style="border: 2px solid #a4d424;padding: 0 2px">最新</div>
+              <i class="icon-circle z1" :class="index == 0 ? 'green' : 'silver'" style="margin-right: -.5rem;margin-top: .2rem"></i>
+            </div>
+            <div class="col-10 py1 pl2" :class="index == 0 ? 'green' : 'grey'" style="border-left: 2px solid #aaa">
+                <div v-html="item.time"></div>
+                <div v-html="item.context"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-12 border-top border2 p1">
+      <div class="col-12 flex items-center justify-start p1">
+        <div class="col-3">订单编号：</div>
+        <div class="col-9">{{ order.sn }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1" v-show="order.pay_type != ''">
+        <div class="col-3">支付方式：</div>
+        <div class="col-9">{{ order.pay_type }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1" v-show="order.transaction != ''">
+        <div class="col-3">支付流水：</div>
+        <div class="col-9">{{ order.transaction }}</div>
+      </div>
+      <div class="col-12 flex items-center justify-start p1" v-show="order.paid_at != ''">
+        <div class="col-3">付款时间：</div>
+        <div class="col-9">付款于 {{ order.paid_at }}</div>
+      </div>
+    </div>
+
+    <foot></foot>
+  </div>
+</layout>

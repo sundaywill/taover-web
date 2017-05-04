@@ -1,0 +1,7 @@
+<layout>
+  <div class="clearfix bg-white">
+    <div class="clearfix col col-12 flex items-center justify-start p2" v-for="item in datasets">
+      <bar :title="item.title" :labels="item.labels" :data="item.data"></bar>
+    </div>
+  </div>
+</layout>

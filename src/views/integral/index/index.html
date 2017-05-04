@@ -1,0 +1,37 @@
+<keep-alive>
+  <layout>
+    <b slot="center" class="p2 grey">我的积分</b>
+    <router-link slot="right" class="p2 grey" to="/integrals/rule">
+      <i class="icon-question"></i> 积分规则
+    </router-link>
+
+    <div class="clearfix grey bg-white">
+      <refresh-loading :method="refresh" ref="top">
+        <div class="flex flex-wrap content-center p2 border-bottom">
+          <div class="col-12 pt1">
+            <b class="pr1">当前积分：{{ integral.points }}</b>
+            <b class="pl1 border-left">当前经验值：{{ integral.rank }}</b>
+          </div>
+          <div class="col-12 pt1 light" v-if="integral.need == 0">恭喜！您已经是 {{ integral.next }}</div>
+          <div class="col-12 pt1 light" v-else>还差 {{ integral.need }} 经验值，您就升为 {{ integral.next }} 了</div>
+        </div>
+
+        <div class="flex justify-between items-around border-bottom py1" v-for="item in integral.list">
+          <div class="flex justify-end col-2 p1 center label" v-if="item.value < 0">{{ item.value }}</div>
+          <div class="flex justify-end col-2 p1 center label red" v-else>{{ item.value }}</div>
+          <div class="flex flex-wrap content-center col-10 pl1 border-left">
+            <div class="col-12">{{ item.name }}</div>
+            <div class="col-12 light">{{ item.time }}</div>
+          </div>
+        </div>
+
+        <infinite-loading :on-infinite="onInfinite">
+          <div class="center silver p2">
+            <i class="icon-spinner spinning" v-if="integral.more"></i>
+            <a class="btn more" v-else>没有更多了</a>
+          </div>
+        </infinite-loading>
+      </refresh-loading>
+    </div>
+  </layout>
+</keep-alive>

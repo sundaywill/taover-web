@@ -1,0 +1,55 @@
+<layout>
+  <b slot="center" class="p2 grey">促销项目</b>
+  <div class="clearfix grey bg-silver pt1">
+    <refresh-loading :method="refresh" ref="top">
+      <div class="clearfix" v-for="item in project.list">
+        <router-link :to="{ path: '/goods', query: { id: item.id }}">
+          <div class="border m1 grey bg-white border-ddd">
+            <img style="width: 100%" :src="item.img + '@90q'">
+            <div class="px2 pt1 pb1">
+              <div><span class="bold dark">{{ item.name }}</span></div>
+              <div class="py1 h5 silver">{{ item.desc }}</div>
+              <div class="pt1 border-top">
+                <router-link class="grey pr2" :to="{ path: '/goods/sold', query: { id: item.id } }">
+                  <i class="icon-sold"></i> 已售 {{ item.sold }}</router-link>
+                <router-link class="grey pr2" :to="{ path: '/comment', query: { id: item.id } }">
+                  <i class="icon-commenting"></i> 掺和 {{ item.comments }}</router-link>
+                <router-link class="grey pr2" :to="{ path: '/vote/vote', query: { pid: item.id } }">
+                  <i class="icon-vote"></i> 投票 {{ item.votes }}</router-link>
+              </div>
+              <div class="flex items-center pt1 mt1 border-top orange" v-show="item.type == 1 && item.recommendation > 0">
+                <i class="icon-thumbs-up"></i>
+                <span class="pl1">试吃团推荐度：{{ item.recommendation }}%</span>
+              </div>
+              <router-link class="flex items-center pt1 mt1 border-top green"
+                           v-show="item.type !== 1 && item.detec && item.detec_link != '' && item.id !== 24"
+                           :to="{ path: '/article', query: { id: item.detec_link, pid: item.id } }">
+                <i class="icon-microscope"></i><span class="pl1">{{ item.detec }}</span>
+              </router-link>
+              <router-link class="flex items-center pt1 mt1 border-top green"
+                           v-show="item.type !== 1 && item.detec && item.id == 24"
+                           :to="{ path: '/detection', query: { id: item.detec_id } }">
+                <i class="icon-microscope"></i><span class="pl1">{{ item.detec }}</span>
+              </router-link>
+              <router-link class="flex items-center pt1 mt1 border-top teal"
+                           :to="{ path: '/article', query: { id: item.article.id, pid: item.id } }"
+                           v-show="item.article && item.article.title !== ''">
+                <i class="icon-volume-up"></i><span class="pl1">{{ item.article.title }}</span>
+              </router-link>
+            </div>
+          </div>
+        </router-link>
+      </div>
+
+      <infinite-loading :on-infinite="onInfinite">
+        <div class="center p2 silver" v-if="project.more">
+          <i class="icon-spinner spinning"></i>
+        </div>
+        <div class="center p2" v-else>
+          <a class="btn silver">没有更多了</a>
+          <router-link class="btn silver invalid" to="/projectOut/best">查看以往项目 >></router-link>
+        </div>
+      </infinite-loading>
+    </refresh-loading>
+  </div>
+</layout>

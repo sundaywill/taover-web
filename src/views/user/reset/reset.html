@@ -1,0 +1,25 @@
+<layout>
+  <b slot="center" class="p2 grey">重置密码</b>
+  <div class="clearfix flex justify-center items-center bg-white">
+    <div class="col-10 sm-col-9 md-col-8 lg-col-8">
+      <div class="clearfix mx-auto p2">
+        <div class="flex justify-center items-center my2">
+          <div class="col-4">
+            <img class="logo circle" v-lazy="avatar" v-if="avatar != ''">
+            <img class="logo circle" src="http://img01.taover.com/images/tylife-circle.png" v-else>
+          </div>
+        </div>
+        <div class="flex justify-center items-center my2">
+          <h4 class="grey"><i class="icon-lock"></i> 设置一个安全的密码</h4>
+        </div>
+        <div class="flex justify-center items-center my2">
+          <input type="password" class="input center" placeholder="不少于6位字母或数字" v-model="password">
+        </div>
+        <div class="flex justify-center items-center my2">
+          <a class="btn btn-primary center login" @click="reset" v-if="verified">确 认</a>
+          <a class="btn btn-primary center login disabled" v-else>确 认</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</layout>

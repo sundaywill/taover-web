@@ -1,0 +1,27 @@
+.brown {
+  color: #c76700;
+}
+.invite-tip {
+  color: #c76700;
+  margin: 0;
+}
+.invite-btn {
+  background: #fa6137;
+  color: #fff9b5;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: .3rem;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.invite-reb {
+  border-top: 2px solid #fa6137;
+}
+.invite-reb img {
+  background: #fcdc6f;
+  width: 100px;
+  padding: .3rem;
+  position: relative;
+  top: -1.2rem;
+}

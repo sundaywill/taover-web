@@ -1,0 +1,34 @@
+<keep-alive>
+  <layout>
+    <b slot="center" class="p2 grey">失效优惠券</b>
+    <div class="clearfix silver px2">
+      <refresh-loading :method="refresh" ref="top">
+        <div class="flex justify-between items-between white" v-for="item in coupons.list">
+          <div class="flex flex-wrap content-between rounded border p2 mt2 col-12 card bg-gradient-grey">
+            <div class="flex justify-between items-between translucent">
+              <div class="flex flex-wrap content-start" :class="item.value > 9 ? 'col-7' : 'col-9'">
+                <div class="col-12 fs-14">{{ item.name }}</div>
+                <div class="col-12">使用范围：{{ item.range }}</div>
+              </div>
+              <div class="flex justify-end center pl2" :class="item.value > 9 ? 'col-5' : 'col-3'">
+                <div class="fs2">￥</div>
+                <div class="value">{{ item.value }}</div>
+              </div>
+            </div>
+            <div class="flex flex-wrap content-end translucent">
+              <div class="col-12 fs-12" v-if="item.limit > 0">购满{{ item.limit }}元可以使用</div>
+              <div class="col-12">使用时间：{{ item.time }}</div>
+            </div>
+          </div>
+          <i class="icon-invalid disabled-tag py2" v-if="item.type == 1"></i>
+          <i class="icon-used disabled-tag py2" v-else></i>
+        </div>
+
+        <infinite-loading :on-infinite="onInfinite">
+          <div class="center p2 silver" v-if="coupons.more"><i class="icon-spinner spinning"></i></div>
+          <div class="center p2" v-else><a class="btn silver">没有更多了</a></div>
+        </infinite-loading>
+      </refresh-loading>
+    </div>
+  </layout>
+</keep-alive>

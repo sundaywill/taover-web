@@ -1,0 +1,6 @@
+.nav {  border-bottom: 1px solid #eaeaea;  }
+.nav .icon-home-circle {  font-size: 2rem;  }
+.nav img {  height: 1rem;  }
+.nav i, .nav img {  vertical-align: middle;  }
+.fade-enter-active, .fade-leave-active {  transition: all .3s ease;  }
+.fade-enter, .fade-leave-active {  opacity: 0;  }

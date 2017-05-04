@@ -1,0 +1,101 @@
+<layout>
+  <b slot="center" class="p2 grey">梅子淘源检测</b>
+  <div class="clearfix">
+    <div class="col col-12 p2 bg-white">
+      <div class="pb2 center orange h3 bold">检测项覆盖率与通过率</div>
+
+      <div class="p1 center white tab-bar bg-orange1">基础标准</div>
+      <div class="p1 orange1">
+        <div class="flex items-center justify-start">
+          <div class="p1">
+            <p-circle color="#ff9915" fillColor="#ff9915" borderColor="#fdf5cc" width="100" bold="15" :pv="detections[0]"></p-circle>
+          </div>
+          <div class="p1">
+            <div>覆盖率</div>
+            <div>描述<span class="red">{{ detections[1] }}</span>项</div>
+            <div>实际抽检检测{{ detections[2] }}项</div>
+            <div>大于一般覆盖率</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-start">
+          <div class="p1">
+            <p-circle color="#ff9915" fillColor="#ff9915" borderColor="#fdf5cc" width="100" bold="15" :pv="detections[3]"></p-circle>
+          </div>
+          <div class="p1">
+            <div>覆盖率</div>
+            <div>描述<span class="red">{{ detections[4] }}</span>项</div>
+            <div>实际抽检检测<span class="red">{{ detections[5] }}</span>项</div>
+            <div>大于一般覆盖率</div>
+          </div>
+        </div>
+      </div>
+      <div class="pb2 orange1">《食品中农药最残留限量标准》GB2763-2014</div>
+
+      <div class="p1 center white tab-bar bg-lime1">绿色附加标准</div>
+      <div class="p1 lime1">
+        <div class="flex items-center justify-start">
+          <div class="p1">
+            <p-circle color="#a7d700" fillColor="#a7d700" borderColor="#edf7cc" width="100" bold="15" :pv="detections[6]"></p-circle>
+          </div>
+          <div class="p1">
+            <div>覆盖率</div>
+            <div>描述<span class="orange">{{ detections[7] }}</span>项</div>
+            <div>实际抽检检测<span class="orange">{{ detections[8] }}</span>项</div>
+            <div>大于一般覆盖率</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-start">
+          <div class="p1">
+            <p-circle color="#a7d700" fillColor="#a7d700" borderColor="#edf7cc" width="100" bold="15" :pv="detections[9]"></p-circle>
+          </div>
+          <div class="p1">
+            <div>覆盖率</div>
+            <div>描述<span class="orange">{{ detections[10] }}</span>项</div>
+            <div>实际抽检检测<span class="orange">{{ detections[11] }}</span>项</div>
+            <div>大于一般覆盖率</div>
+          </div>
+        </div>
+      </div>
+      <div class="pb2 lime1">《绿色食品标准》NYT419-2007</div>
+
+      <div class="p1 center white tab-bar bg-green1">出口标准</div>
+      <div class="p1 green1">
+        <div class="flex items-center justify-start">
+          <div class="p1">
+            <p-circle color="#42ad3c" fillColor="#42ad3c" borderColor="#d9efd8" width="100" bold="15" :pv="detections[12]"></p-circle>
+          </div>
+          <div class="p1">
+            <div>覆盖率</div>
+            <div>描述<span class="lime1">{{ detections[13] }}</span>项</div>
+            <div>实际抽检检测<span class="lime1">{{ detections[14] }}</span>项</div>
+            <div>大于一般覆盖率</div>
+          </div>
+        </div>
+        <div class="flex items-center justify-start">
+          <div class="p1">
+            <p-circle color="#42ad3c" fillColor="#42ad3c" borderColor="#d9efd8" width="100" bold="15" :pv="detections[15]"></p-circle>
+          </div>
+          <div class="p1">
+            <div>覆盖率</div>
+            <div>描述<span class="green">{{ detections[16] }}</span>项</div>
+            <div>实际抽检检测<span class="green">{{ detections[17] }}</span>项</div>
+            <div>大于一般覆盖率</div>
+          </div>
+        </div>
+      </div>
+      <div class="pb2 green1">《欧盟食品质量标准》(EC)18812006</div>
+
+      <div class="px2 right" v-if="article == ''">
+        <router-link class="orange" :to="{ path: '/article', query: { id: article } }">查看原始报告>></router-link>
+      </div>
+      <div class="col col-12 py2 mx-auto center">
+        <router-link class="px4 py2 white h3 btn btn-detecs2" v-if="scan_img != ''"
+                     :to="{ path: '/detection/result', query: { id: id } }">查看绿色标准优势扫描</router-link>
+        <router-link class="px4 py2 white h3 btn btn-detecs2" v-if="article != '' && scan_img == ''"
+           :to="{ path: '/article', query: { id: article } }">查看绿色标准优势扫描</router-link>
+      </div>
+    </div>
+
+    <foot></foot>
+  </div>
+</layout>

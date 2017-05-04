@@ -1,0 +1,31 @@
+<layout>
+  <b slot="center" class="p2 grey">买手</b>
+  <div class="clearfix bg-white">
+    <div class="p2" style="font-color:#5f5f5f;">
+      <div class="flex justify-center items-stretch border-bottom">
+        <div class="log-img circle">
+          <img class="col-12 circle" v-if="maishou.log_img" v-lazy="maishou.log_img"/>
+          <img class="col-12 circle" v-else src="http://m.taover.com/themes/default/images/images/headimg.jpg"/>
+        </div>
+        <div class="flex flex-wrap content-center h5 ml1">
+          <span class="mr2">姓名：<span class="name">{{maishou.maishou_name}}</span></span>
+          <span>地区：{{maishou.maishou_addr}}</span>
+          <span class="col-12 mt1">职业：{{maishou.maishou_job}}</span>
+        </div>
+      </div>
+      <div class="border-bottom h5">
+        <p class="name">个人介绍</p>
+        <p>{{ maishou.maishou_intro }}</p>
+      </div>
+      <div class="border-bottom h5">
+        <p class="name">购买初心</p>
+        <p>{{ maishou.maishou_message }}</p>
+      </div>
+      <div class="border-bottom h5">
+        <p class="name">我的梦想</p>
+        <p>{{ maishou.maishou_dream }}</p>
+      </div>
+    </div>
+    <foot></foot>
+  </div>
+</layout>

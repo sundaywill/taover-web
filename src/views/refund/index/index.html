@@ -1,0 +1,70 @@
+<layout>
+  <b slot="center" class="p2 grey">退款</b>
+  <div class="clearfix dark overflow-hidden bg-white refund-main">
+    <form class="px2 h5 color-555 justify-center pb2">
+
+      <div v-if="orderInfo.shipping_status!=0">
+        <p class="pb0 mb1"><span>收货状态<span class="red pl1">*</span></span></p>
+        <select class="py-1-4em rounded col-12" @change="receiveStatus" v-model="ship_status">
+          <option v-bind:value="opt.value" v-for="opt in options1">{{ opt.text }}</option>
+        </select>
+
+        <p class="pb0 mb1"><span>退款原因<span class="red pl1">*</span></span></p>
+        <select class="py-1-4em rounded col-12" v-bind:name="refundReason1" v-show="reasonShow" v-model="reason1">
+          <option v-bind:value="opt.value" v-for="opt in options2">{{ opt.text }}</option>
+        </select>
+        <select class="py-1-4em rounded col-12" v-bind:name="refundReason2"  v-show="!reasonShow" v-model="reason2">
+          <option v-bind:value="opt.value" v-for="opt in options3">{{ opt.text }}</option>
+        </select>
+      </div>
+      <div v-else>
+        <p class="pb0 mb1"><span>退款原因<span class="red pl1">*</span></span></p>
+        <select class="py-1-4em rounded col-12" name="refund_reason" @change="shipStatus" v-model="reason3">
+          <option v-bind:value="opt.value" v-for="opt in options4">{{ opt.text }}</option>
+        </select>
+      </div>
+
+      <p class="pb0 mb1"><span>退款金额<span class="red pl1">*</span></span><span class="gray ml2">{{ moneyTip }}</span></p>
+      <input class="py-1-4em rounded col-12 border" v-bind:readonly="readOnly" v-model="money" v-bind:placeholder="placeholder" style="text-indent:5px;"/>
+
+      <div v-show="!reasonShow">
+        <p class="gray">部分退款金额请与客服沟通确定</p>
+        <p class="orange">客服电话：010-58264553 (工作日10：00-18：00)</p>
+      </div>
+
+      <div class="pb0 mb1 flex justify-start py2">
+        <span class="block" style="min-width:5.5em;">退款路径<span class="red pl1">*</span></span>
+        <div>
+          <input v-model="refundPath" v-bind:value="radio1" name="refund_path" id="refund_path1" type="radio">
+          <label for="refund_path1">退款至账户余额<span class="orange h6 ml2">(实时到账,立即使用)</span></label><br/>
+          <input v-model="refundPath" v-bind:value="radio2" name="refund_path" id="refund_path2" type="radio" class="mt2">
+          <label class="mt2" for="refund_path2">原路退回<span class="orange h6 ml2">(余额支付实时到账，现金退回至银行卡需3-5个工作日)</span></label>
+        </div>
+      </div>
+
+      <p class="pb0 mb1"><span>退款说明<span class="red pl1">*</span></span></p>
+      <textarea class="py-1-4em rounded col-12 px0 py1 refund_message h5" v-model="refundSay" placeholder="请输入退款说明"></textarea>
+
+      <div v-if="orderInfo.shipping_status!=0">
+        <div v-show="!reasonShow">
+          <p class="pb0 mb0"><span>凭证照片<span class="red pl1">*</span></span><span class="gray ml2">上传凭证照片，最多3张</span></p>
+          <a class="block mt1" @click="uploadWx" v-if="iswx" style="width:100px;"><img src="http://ty-image-01.oss-cn-qingdao.aliyuncs.com/images/shangchuan.png"/>wx</a>
+          <a class="block mt1" onclick="uploader.click()" v-else style="width:100px;"><img src="http://ty-image-01.oss-cn-qingdao.aliyuncs.com/images/shangchuan.png"/></a>
+          <input class="hide" type="file" accept="image/*" multiple id="uploader" @change="upload">
+        </div>
+        <div class="col col-12 px1 center flex justify-start" v-show="imgs.length > 0">
+          <div class="col-4 p1" v-for="(img, index) in locals">
+            <div class="bg-img" v-lazy-bg="img"></div>
+            <a class="btn remove" @click="deleteImg(index)"><i class="icon-times-circle"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <a class="block bg-orange center col-12 white h4 rounded py1 left my2"
+         @click="submitApply" v-show="!submitting">提交申请</a>
+      <a class="block bg-orange center col-12 white h4 rounded py1 left my2 btn-disabled"
+         v-show="submitting"><i class="icon-spinner spinning"></i>正在提交...</a>
+    </form>
+    <foot></foot>
+  </div>
+</layout>

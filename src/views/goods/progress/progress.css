@@ -1,0 +1,10 @@
+.icon-circle.dot {  margin-right: -.5rem;  }
+.progress>div {  border-radius: 2rem;width: .5rem;  }
+.py13 {  padding: 1.3rem 0;  }
+section {  font-size: 1rem!important;  word-break: break-all;  word-wrap: break-word;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif!important;  font-weight: 400;  }
+#project section {  line-height: 1.6rem;  }
+section img {  vertical-align: bottom!important;  }
+.bg-green {  background-color: #a4d424;  }
+.bg-gray {  background-color: #cdcdcd;  }
+.green {  color: #a4d424;  }
